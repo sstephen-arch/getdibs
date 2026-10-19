@@ -56,9 +56,14 @@ describe("assembleFrontPage — volume", () => {
 
   it("keeps every item exactly once across lead, bunks and feed", () => {
     for (const n of [1, 2, 3, 4, 5, 30]) {
-      const page = assembled(n);
-      const slugs = [page.lead.slug, ...page.bunks.map((e) => e.slug), ...page.feed.map((e) => e.slug)];
+      const items = makeEntries(n);
+      const page = build(items);
+      const others = [...page.bunks, ...page.feed].map((e) => e.slug);
+      const slugs = [page.lead.slug, ...others];
+      expect(slugs).toHaveLength(n);
       expect(new Set(slugs).size).toBe(n);
+      expect(others).not.toContain(page.lead.slug);
+      expect(new Set(slugs)).toEqual(new Set(items.map((e) => e.slug)));
     }
   });
 
@@ -212,11 +217,9 @@ describe("assembleFrontPage — bands and minimums", () => {
   });
 
   it("lists only topics in use, in config order", () => {
-    const used = [
-      entry({ slug: "a", topics: ["local-ai"] }),
-      project({ slug: "p", topics: ["local-ai"] }),
-    ];
-    expect(topicsInUse(used as never, []).map((t) => t.slug)).toEqual(["local-ai"]);
+    const items = [entry({ slug: "a", topics: ["local-ai"] })];
+    const projects = [project({ slug: "p", topics: ["building"] })];
+    expect(topicsInUse(items, projects).map((t) => t.slug)).toEqual(["local-ai", "building"]);
   });
 
   it("shows two topics in config order, not usage order", () => {
