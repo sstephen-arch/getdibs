@@ -1,11 +1,14 @@
+import { FrontPageView } from "@/components/FrontPageView";
 import { StockShell } from "@/components/StockShell";
+import { assembleFrontPage } from "@/content/frontpage";
+import { loadContent } from "@/content/load";
 
 export default function Page() {
+  const { entries, projects } = loadContent();
+  const page = assembleFrontPage(entries, projects);
   return (
     <StockShell stock="wire">
-      <div className="mx-auto max-w-6xl px-5 py-16">
-        <h1 className="font-display text-5xl font-semibold tracking-tight">DIBS</h1>
-      </div>
+      <FrontPageView page={page} now={new Date()} />
     </StockShell>
   );
 }
