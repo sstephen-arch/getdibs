@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; }
+
+/* --tokens-start-- */
+:root {
+  --background: 36 33% 97%;
+}
+/* --tokens-end-- */
