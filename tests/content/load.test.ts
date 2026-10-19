@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { loadContent, loadEntries, loadProjects } from "@/content/load";
+import { ContentError } from "@/content/validate";
 
 let root: string;
 
@@ -66,6 +67,29 @@ describe("loadEntries", () => {
     expect(() => loadEntries(join(root, "entries"))).toThrow(/needs a YYYY-MM-DD filename prefix/);
   });
 
+  it("names the file when YAML frontmatter is malformed", () => {
+    const file = join(root, "entries/2026-10-19-broken.md");
+    write("entries/2026-10-19-broken.md", "---\ntitle: [unclosed\n---\n\nx\n");
+
+    let thrown: unknown;
+    try {
+      loadEntries(join(root, "entries"));
+    } catch (error) {
+      thrown = error;
+    }
+
+    expect(thrown).toBeInstanceOf(ContentError);
+    expect((thrown as Error).message.startsWith(`${file}: `)).toBe(true);
+  });
+
+  it("fails on two entries with the same slug", () => {
+    write("entries/2026-01-01-dup.md", "---\nkind: note\nsummary: s\n---\n\nx\n");
+    write("entries/2026-02-01-dup.md", "---\nkind: note\nsummary: s\n---\n\nx\n");
+    expect(() => loadEntries(join(root, "entries"))).toThrow(
+      /2026-02-01-dup\.md: duplicate entry slug "dup"/,
+    );
+  });
+
   it("returns newest first", () => {
     write("entries/2026-01-01-a.md", "---\nkind: note\nsummary: s\n---\n\nx\n");
     write("entries/2026-02-01-b.md", "---\nkind: note\nsummary: s\n---\n\nx\n");
@@ -85,6 +109,23 @@ describe("loadContent", () => {
     const { entries, projects } = loadContent(root);
     expect(entries[0].project).toBe("manifest");
     expect(projects[0].slug).toBe("manifest");
+  });
+
+  it("treats a missing projects directory as no projects", () => {
+    write("entries/2026-10-19-a.md", "---\nkind: note\nsummary: s\n---\n\nx\n");
+    rmSync(join(root, "projects"), { recursive: true, force: true });
+
+    const { entries, projects } = loadContent(root);
+    expect(entries.map((entry) => entry.slug)).toEqual(["a"]);
+    expect(projects).toEqual([]);
+  });
+
+  it("still fails when the projects path is a file, not a directory", () => {
+    write("entries/2026-10-19-a.md", "---\nkind: note\nsummary: s\n---\n\nx\n");
+    rmSync(join(root, "projects"), { recursive: true, force: true });
+    writeFileSync(join(root, "projects"), "not a directory");
+
+    expect(() => loadContent(root)).toThrow(/ENOTDIR/);
   });
 
   it.skipIf(CASE_INSENSITIVE)("fails on two projects with the same slug", () => {

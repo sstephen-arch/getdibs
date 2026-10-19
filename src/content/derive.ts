@@ -1,3 +1,5 @@
+import { ContentError } from "./validate";
+
 const PREFIX = /^(\d{4}-\d{2}-\d{2})-(.+)$/;
 const FULL_STOP = /[.!?](?=\s|$)/;
 
@@ -33,4 +35,21 @@ export function sortEntries<T extends { date: string; slug: string }>(items: T[]
 
 export function publishedOnly<T extends { draft?: boolean }>(items: T[]): T[] {
   return items.filter((item) => !item.draft);
+}
+
+/** Slugs are the public URL, so two files may not claim the same one. Folding
+ *  case makes the rule hold even on a case-insensitive filesystem, and naming
+ *  the second file makes the mistake obvious. */
+export function assertUniqueSlugs(
+  items: { slug: string; file: string }[],
+  label: "entry" | "project" = "project",
+): void {
+  const seen = new Set<string>();
+  for (const { slug, file } of items) {
+    const key = slug.toLowerCase();
+    if (seen.has(key)) {
+      throw new ContentError(`${file}: duplicate ${label} slug "${key}"`);
+    }
+    seen.add(key);
+  }
 }

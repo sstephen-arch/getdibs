@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { entryDate, noteHeadline, parseFilename, publishedOnly, sortEntries } from "@/content/derive";
+import {
+  assertUniqueSlugs,
+  entryDate,
+  noteHeadline,
+  parseFilename,
+  publishedOnly,
+  sortEntries,
+} from "@/content/derive";
+import { ContentError } from "@/content/validate";
 
 describe("parseFilename", () => {
   it("splits the date prefix from the slug", () => {
@@ -68,5 +76,39 @@ describe("sortEntries", () => {
 describe("publishedOnly", () => {
   it("drops drafts and keeps everything else", () => {
     expect(publishedOnly([{ draft: true }, {}, { draft: false }])).toHaveLength(2);
+  });
+});
+
+describe("assertUniqueSlugs", () => {
+  it("folds case and names the second file", () => {
+    const run = () =>
+      assertUniqueSlugs([
+        { slug: "manifest", file: "content/projects/manifest.md" },
+        { slug: "MANIFEST", file: "content/projects/MANIFEST.md" },
+      ]);
+
+    expect(run).toThrow(ContentError);
+    expect(run).toThrow(/content\/projects\/MANIFEST\.md: duplicate project slug "manifest"/);
+  });
+
+  it("accepts distinct slugs", () => {
+    expect(() =>
+      assertUniqueSlugs([
+        { slug: "manifest", file: "a.md" },
+        { slug: "other", file: "b.md" },
+      ]),
+    ).not.toThrow();
+  });
+
+  it("labels entry collisions", () => {
+    expect(() =>
+      assertUniqueSlugs(
+        [
+          { slug: "hello", file: "entries/2026-01-01-hello.md" },
+          { slug: "HELLO", file: "entries/2026-02-01-HELLO.md" },
+        ],
+        "entry",
+      ),
+    ).toThrow(/2026-02-01-HELLO\.md: duplicate entry slug "hello"/);
   });
 });

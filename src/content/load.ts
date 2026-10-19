@@ -1,7 +1,14 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import matter from "gray-matter";
-import { entryDate, noteHeadline, parseFilename, publishedOnly, sortEntries } from "./derive";
+import {
+  assertUniqueSlugs,
+  entryDate,
+  noteHeadline,
+  parseFilename,
+  publishedOnly,
+  sortEntries,
+} from "./derive";
 import type { EntryFrontmatter, ProjectFrontmatter } from "./schema";
 import { ContentError, validateEntry, validateProject } from "./validate";
 
@@ -21,15 +28,33 @@ export interface Project extends ProjectFrontmatter {
 }
 
 function markdownFiles(dir: string): string[] {
-  return readdirSync(dir)
-    .filter((name) => name.endsWith(".md"))
-    .sort();
+  let names: string[];
+  try {
+    names = readdirSync(dir);
+  } catch (error) {
+    // A missing directory means nothing has been published yet. Every other
+    // failure (permissions, a file where a directory belongs) must still surface.
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return [];
+    throw error;
+  }
+  return names.filter((name) => name.endsWith(".md")).sort();
+}
+
+/** gray-matter throws a bare YAMLException; this puts the file back on the front
+ *  so every content failure starts with the path the author needs to fix. */
+function parseFrontmatter(file: string, text: string): ReturnType<typeof matter> {
+  try {
+    return matter(text);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new ContentError(`${file}: ${message}`);
+  }
 }
 
 export function loadEntries(dir = "content/entries"): Entry[] {
   const entries = markdownFiles(dir).map((name): Entry => {
     const file = join(dir, name);
-    const raw = matter(readFileSync(file, "utf8"));
+    const raw = parseFrontmatter(file, readFileSync(file, "utf8"));
     const front = validateEntry(file, raw.data);
     const parsed = parseFilename(name);
     if (!parsed) {
@@ -48,22 +73,21 @@ export function loadEntries(dir = "content/entries"): Entry[] {
     };
   });
 
+  assertUniqueSlugs(entries, "entry");
+
   return sortEntries(publishedOnly(entries));
 }
 
 export function loadProjects(dir = "content/projects"): Project[] {
-  const seen = new Set<string>();
   const projects = markdownFiles(dir).map((name): Project => {
     const file = join(dir, name);
-    const raw = matter(readFileSync(file, "utf8"));
+    const raw = parseFrontmatter(file, readFileSync(file, "utf8"));
     const front = validateProject(file, raw.data);
     const slug = name.replace(/\.md$/, "").toLowerCase();
-    if (seen.has(slug)) {
-      throw new ContentError(`${file}: duplicate project slug "${slug}"`);
-    }
-    seen.add(slug);
     return { ...front, slug, body: raw.content.trim(), file };
   });
+
+  assertUniqueSlugs(projects, "project");
 
   return projects.sort((a, b) => b.year.localeCompare(a.year) || a.slug.localeCompare(b.slug));
 }
