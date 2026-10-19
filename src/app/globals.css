@@ -1,10 +1,114 @@
 @import "tailwindcss";
 
-html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; }
-
+/* Ported verbatim from depaloconsultingllc.com. Same names, same values, so a
+   change on either site is a copy-paste. Depalo's --chart-1..6 are deliberately
+   not ported: there are no charts here. */
 /* --tokens-start-- */
-:root {
+[data-stock="reading"] {
   --background: 36 33% 97%;
+  --foreground: 40 6% 10%;
+  --card: 0 0% 100%;
+  --card-foreground: 40 6% 10%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 40 6% 10%;
+  --primary: 224 75% 48%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 40 24% 93%;
+  --secondary-foreground: 40 6% 10%;
+  --muted: 40 24% 93%;
+  --muted-foreground: 38 5% 40%;
+  --accent: 40 24% 93%;
+  --accent-foreground: 40 6% 10%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 37 21% 88%;
+  --input: 37 21% 88%;
+  --ring: 224 75% 48%;
+  --highlight: 32 95% 44%;
+  --live: 149 66% 30%;
+}
+
+[data-stock="wire"] {
+  --background: 40 7% 8%;
+  --foreground: 40 27% 93%;
+  --card: 30 7% 11%;
+  --card-foreground: 40 27% 93%;
+  --popover: 30 7% 11%;
+  --popover-foreground: 40 27% 93%;
+  --primary: 226 82% 72%;
+  --primary-foreground: 222 55% 13%;
+  --secondary: 34 8% 17%;
+  --secondary-foreground: 40 27% 93%;
+  --muted: 34 8% 17%;
+  --muted-foreground: 39 7% 61%;
+  --accent: 34 8% 17%;
+  --accent-foreground: 40 27% 93%;
+  --destructive: 0 72% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 34 8% 17%;
+  --input: 34 8% 17%;
+  --ring: 226 82% 72%;
+  --highlight: 38 92% 58%;
+  --live: 149 49% 49%;
 }
 /* --tokens-end-- */
+
+/* `inline` is load-bearing, exactly as it is in the existing Starkive project: the
+   generated utilities must carry the value, not a second level of var() indirection
+   over a token that a nested stock scope re-declares. */
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-border: hsl(var(--border));
+  --color-ring: hsl(var(--ring));
+  --color-highlight: hsl(var(--highlight));
+  --color-live: hsl(var(--live));
+
+  --font-display: var(--font-source-serif);
+  --font-ui: var(--font-inter);
+  --font-mono: var(--font-jetbrains);
+
+  --radius-control: 0.5rem;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-ui), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Records read as records. Anything that is a date, a byline or a slug opts in. */
+.record {
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The reading measure. Long-form only; the wire stays wide and dense. */
+.measure {
+  max-width: 68ch;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

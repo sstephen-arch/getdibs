@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { readTokens } from "./helpers/tokens";
+import { readTokenScopes } from "./helpers/tokens";
 
 describe("scaffold", () => {
-  it("exposes the ported token block", () => {
-    expect(readTokens()["background"]).toBeDefined();
+  it("exposes both stocks in the token region", () => {
+    const scopes = readTokenScopes();
+    expect(Object.keys(scopes)).toHaveLength(2);
   });
 });

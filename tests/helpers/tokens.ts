@@ -3,17 +3,33 @@ import { fileURLToPath } from "node:url";
 
 const CSS_PATH = fileURLToPath(new URL("../../src/app/globals.css", import.meta.url));
 
-/** Parses a `--name: H S% L%` block out of globals.css. The CSS file is the
- *  source of truth; the spec's token table is asserted against it, not duplicated. */
-export function readTokens(): Record<string, string> {
+/** Parses the `--tokens-start--` … `--tokens-end--` region of globals.css into
+ *  { selector: { token: value } }. globals.css is the source of truth; the spec's
+ *  token table is asserted against it rather than copied into a second place. */
+export function readTokenScopes(): Record<string, Record<string, string>> {
   const css = readFileSync(CSS_PATH, "utf8");
-  const block = css.match(/--tokens-start--([\s\S]*?)--tokens-end--/);
-  if (!block) throw new Error("globals.css is missing the --tokens-start--/--tokens-end-- block");
-  const out: Record<string, string> = {};
-  for (const line of block[1].split("\n")) {
-    const m = line.match(/^\s*--([a-z0-9-]+):\s*([^;]+);/);
-    if (m) out[m[1]] = m[2].trim();
+  const region = css.match(/--tokens-start--([\s\S]*?)--tokens-end--/);
+  if (!region) throw new Error("globals.css is missing the --tokens-start--/--tokens-end-- block");
+
+  /* The markers are comments, so the captured region begins with the closing
+     comment delimiter and may contain other comments. Strip them so selector
+     keys are exact. */
+  const body = region[1]
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/^\s*\*\/\s*/, "");
+
+  const scopes: Record<string, Record<string, string>> = {};
+  for (const block of body.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    const selector = block[1].trim().replace(/\s+/g, " ");
+    const tokens: Record<string, string> = {};
+    for (const decl of block[2].matchAll(/--([a-z0-9-]+):\s*([^;]+);/g)) {
+      tokens[decl[1]] = decl[2].trim();
+    }
+    if (Object.keys(tokens).length > 0) scopes[selector] = tokens;
   }
-  if (Object.keys(out).length === 0) throw new Error("token block parsed but contained no tokens");
-  return out;
+  if (Object.keys(scopes).length === 0) throw new Error("token region parsed but held no declarations");
+  return scopes;
 }
+
+export const WIRE = '[data-stock="wire"]';
+export const READING = '[data-stock="reading"]';
