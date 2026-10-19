@@ -15,6 +15,8 @@ export function FrontPageView({ page, now }: { page: FrontPage; now: Date }) {
     );
   }
 
+  const hasRail = page.watch.length > 0 || page.projects.length > 0 || page.topics.length > 0;
+
   return (
     <div className="mx-auto max-w-6xl px-5">
       {/* The masthead carries the wordmark; this names the page for assistive
@@ -32,13 +34,16 @@ export function FrontPageView({ page, now }: { page: FrontPage; now: Date }) {
       )}
 
       {page.feed.length > 0 && (
-        <section data-band="feed" className="grid gap-10 border-b border-border py-8 lg:grid-cols-[1fr_18rem]">
+        <section
+          data-band="feed"
+          className={`grid gap-10 border-b border-border py-8 ${hasRail ? "lg:grid-cols-[1fr_18rem]" : ""}`}
+        >
           <div className="flex flex-col gap-10">
             {page.feed.map((entry) => (
               <Card key={entry.slug} entry={entry} size="row" now={now} />
             ))}
           </div>
-          <Rail page={page} />
+          {hasRail && <Rail page={page} />}
         </section>
       )}
 
