@@ -1,0 +1,76 @@
+// @vitest-environment jsdom
+import { describe, expect, it } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { Article } from "@/components/Article";
+import { VideoEmbed } from "@/components/VideoEmbed";
+import { entry } from "../helpers/fixtures";
+
+const NOW = new Date("2026-10-19T12:00:00Z");
+
+describe("Article", () => {
+  it("renders the title, byline and body html", () => {
+    const { container } = render(
+      <Article entry={entry({ kind: "essay", title: "On-device", slug: "x" })} html="<p>Body text.</p>" now={NOW} />,
+    );
+    expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("On-device");
+    expect(container.querySelector("article")?.innerHTML).toContain("Body text.");
+    expect(screen.getByText(/Shem Stephen/)).toBeTruthy();
+  });
+
+  it("uses the entry author as the byline when frontmatter names one", () => {
+    render(
+      <Article
+        entry={entry({ kind: "essay", title: "On-device", slug: "authored", author: "A Guest" })}
+        html=""
+        now={NOW}
+      />,
+    );
+    expect(screen.getByText(/A Guest/)).toBeTruthy();
+  });
+
+  it("links a link item out to its source", () => {
+    render(
+      <Article
+        entry={entry({ kind: "link", title: "Worth reading", url: "https://x.test/a", source: "The Verge", slug: "l" })}
+        html=""
+        now={NOW}
+      />,
+    );
+    const link = screen.getByRole("link", { name: /The Verge/ });
+    expect(link.getAttribute("href")).toBe("https://x.test/a");
+    expect(link.getAttribute("rel")).toContain("noopener");
+  });
+
+  it("embeds a video without autoplay", () => {
+    const { container } = render(
+      <Article
+        entry={entry({ kind: "video", title: "A talk", video_id: "abc123", channel: "Some Channel", slug: "v" })}
+        html=""
+        now={NOW}
+      />,
+    );
+    const iframe = container.querySelector("iframe");
+    expect(iframe?.getAttribute("src")).toBe("https://www.youtube-nocookie.com/embed/abc123");
+    expect(iframe?.getAttribute("loading")).toBe("lazy");
+    expect(iframe?.getAttribute("src")).not.toContain("autoplay");
+  });
+
+  it("renders a video entry's body text alongside the embed", () => {
+    const { container } = render(
+      <Article
+        entry={entry({ kind: "video", title: "A talk", video_id: "abc123", channel: "Some Channel", slug: "vb" })}
+        html="<p>Why this is worth watching.</p>"
+        now={NOW}
+      />,
+    );
+    expect(container.querySelector("article")?.innerHTML).toContain("Why this is worth watching.");
+  });
+});
+
+describe("VideoEmbed", () => {
+  it("always offers a text link to the source", () => {
+    render(<VideoEmbed id="abc123" title="A talk" channel="Some Channel" url="https://youtube.com/watch?v=abc123" />);
+    expect(screen.getByRole("link", { name: /Watch on YouTube/ }).getAttribute("href"))
+      .toBe("https://youtube.com/watch?v=abc123");
+  });
+});
