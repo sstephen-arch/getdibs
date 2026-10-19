@@ -5,5 +5,8 @@ import { fileURLToPath } from "node:url";
 export default defineConfig({
   plugins: [react()],
   resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
-  test: { environment: "node", globals: true },
+  /* Mirrors next.config.ts's `trailingSlash: true`. Next's <Link> reads this
+     build-time flag to normalise hrefs; without it, tests see hrefs with the
+     trailing slash stripped even though the export writes directory URLs. */
+  test: { environment: "node", globals: true, env: { __NEXT_TRAILING_SLASH: "true" } },
 });
