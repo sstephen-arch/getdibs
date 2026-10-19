@@ -2285,9 +2285,15 @@ describe("FrontPageView", () => {
     expect(container.querySelector('[data-band="feed"]')).toBeNull();
   });
 
-  it("renders the feed and rail at thirty items", () => {
+  it("renders the feed at thirty items and no empty rail", () => {
     const { container } = view(30);
     expect(container.querySelector('[data-band="feed"]')).toBeTruthy();
+    expect(container.querySelector('[data-band="rail"]')).toBeNull();
+  });
+
+  it("renders the rail only when it has real cross-section content", () => {
+    const vids = [3, 2, 1].map((n) => entry({ kind: "video", slug: `v${n}`, date: `2026-10-0${n}` }));
+    const { container } = view(30, vids);
     expect(container.querySelector('[data-band="rail"]')).toBeTruthy();
   });
 
@@ -2462,6 +2468,7 @@ export function Rail({ page }: { page: Extract<FrontPage, { state: "assembled" }
 
 ```tsx
 import type { FrontPage } from "@/content/frontpage";
+import { SITE } from "@/lib/site";
 import { Card } from "./Card";
 import { Lead } from "./Lead";
 import { Rail } from "./Rail";
@@ -2471,13 +2478,16 @@ export function FrontPageView({ page, now }: { page: FrontPage; now: Date }) {
   if (page.state === "empty") {
     return (
       <div className="mx-auto max-w-6xl px-5 py-16">
-        <p className="font-display text-lg text-muted-foreground">Nothing published yet.</p>
+        <h1 className="m-0 font-display text-lg font-normal text-muted-foreground">Nothing published yet.</h1>
       </div>
     );
   }
 
+  const hasRail = page.watch.length > 0 || page.projects.length > 0 || page.topics.length > 0;
+
   return (
     <div className="mx-auto max-w-6xl px-5">
+      <h1 className="sr-only">Latest from {SITE.name}</h1>
       <Lead entry={page.lead} now={now} />
 
       {page.bunks.length > 0 && (
@@ -2489,13 +2499,16 @@ export function FrontPageView({ page, now }: { page: FrontPage; now: Date }) {
       )}
 
       {page.feed.length > 0 && (
-        <section data-band="feed" className="grid gap-10 border-b border-border py-8 lg:grid-cols-[1fr_18rem]">
+        <section
+          data-band="feed"
+          className={`grid gap-10 border-b border-border py-8 ${hasRail ? "lg:grid-cols-[1fr_18rem]" : ""}`}
+        >
           <div className="flex flex-col gap-10">
             {page.feed.map((entry) => (
               <Card key={entry.slug} entry={entry} size="row" now={now} />
             ))}
           </div>
-          <Rail page={page} />
+          {hasRail && <Rail page={page} />}
         </section>
       )}
 
