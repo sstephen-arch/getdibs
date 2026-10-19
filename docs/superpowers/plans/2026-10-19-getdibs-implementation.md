@@ -2002,12 +2002,13 @@ git add -A && git commit -m "feat: self-assembling front page with per-band mini
 No cover image never means a grey rectangle. The plate is a card, a thumbnail, a row and (Task 13) a social preview — one component doing four jobs.
 
 **Files:**
+- Create: `src/content/routes.ts`
 - Create: `src/components/KindTag.tsx`, `src/components/Plate.tsx`, `src/components/Card.tsx`
 - Create: `tests/components/card.test.tsx`
 
 **Interfaces:**
 - Consumes: `Entry` (Task 4), `formatWhen` (Task 4).
-- Produces: `KIND_LABELS: Record<Kind, string>`; `topicColour(slug?: string): string`; `KindTag({ kind })`; `Plate({ entry, size })` with `size: "lead" | "card" | "row"`; `Card({ entry, size?, now })`.
+- Produces: `SECTION_OF_KIND: Record<Kind, string>`; `entryPath(entry): string`; `topicPath(slug): string`; `projectPath(project): string`; `KIND_LABELS: Record<Kind, string>`; `topicColour(slug?: string): string`; `KindTag({ kind })`; `Plate({ entry, size })` with `size: "lead" | "card" | "row"`; `Card({ entry, size?, now })`.
 
 - [ ] **Step 1: Write the failing test**
 
@@ -2079,7 +2080,32 @@ describe("Card", () => {
 Run: `npx vitest run tests/components/card.test.tsx`
 Expected: FAIL — components cannot be resolved.
 
-- [ ] **Step 3: Write the kind tag and the plate**
+- [ ] **Step 3: Write the route map, the kind tag and the plate**
+
+`src/content/routes.ts` — the one place a kind becomes a URL segment. `Card`, `Lead`, the feeds and the metadata all import this; none of them keep a copy.
+
+```ts
+import type { Entry, Project } from "./load";
+
+export const SECTION_OF_KIND: Record<Entry["kind"], string> = {
+  essay: "essays",
+  note: "notes",
+  link: "notes",
+  video: "watch",
+};
+
+export function entryPath(entry: Entry): string {
+  return `/${SECTION_OF_KIND[entry.kind]}/${entry.slug}/`;
+}
+
+export function projectPath(project: Project): string {
+  return `/projects/${project.slug}/`;
+}
+
+export function topicPath(slug: string): string {
+  return `/topics/${slug}/`;
+}
+```
 
 `src/components/KindTag.tsx`:
 
@@ -2156,16 +2182,10 @@ export function Plate({ entry, size = "card" }: { entry: Entry; size?: keyof typ
 ```tsx
 import Link from "next/link";
 import type { Entry } from "@/content/load";
+import { entryPath } from "@/content/routes";
 import { formatWhen } from "@/lib/format";
 import { KindTag } from "./KindTag";
 import { Plate } from "./Plate";
-
-const SECTION: Record<Entry["kind"], string> = {
-  essay: "essays",
-  note: "notes",
-  link: "notes",
-  video: "watch",
-};
 
 export function Card({
   entry,
@@ -2176,7 +2196,7 @@ export function Card({
   size?: "card" | "row";
   now?: Date;
 }) {
-  const href = `/${SECTION[entry.kind]}/${entry.slug}/`;
+  const href = entryPath(entry);
 
   return (
     <article className="flex flex-col gap-3">
@@ -2315,15 +2335,12 @@ Expected: FAIL — `@/components/FrontPageView` cannot be resolved.
 ```tsx
 import Link from "next/link";
 import type { Entry } from "@/content/load";
+import { entryPath } from "@/content/routes";
 import { formatWhen } from "@/lib/format";
 import { KindTag } from "./KindTag";
 
-const SECTION: Record<Entry["kind"], string> = {
-  essay: "essays", note: "notes", link: "notes", video: "watch",
-};
-
 export function Lead({ entry, now }: { entry: Entry; now: Date }) {
-  const href = `/${SECTION[entry.kind]}/${entry.slug}/`;
+  const href = entryPath(entry);
   return (
     <section data-band="lead" className="border-b border-border py-8">
       <div className="grid items-center gap-8 lg:grid-cols-[1.2fr_1fr]">
@@ -3592,15 +3609,13 @@ git add -A && git commit -m "feat: new-item scripts, with OG and oEmbed prefill 
 Four files, one script, one mechanism. The script is pure up to the last step, so the XML and the listing are asserted directly.
 
 **Files:**
-- Create: `src/content/routes.ts`
-- Modify: `src/components/Card.tsx` (use the shared route map instead of its own copy)
 - Create: `scripts/build-feeds.ts`
 - Create: `tests/scripts/feeds.test.ts`
 - Create: `tests/content/routes.test.ts`
 
 **Interfaces:**
-- Consumes: `Entry`, `Project`, `Topic`, `SITE`.
-- Produces: `SECTION_OF_KIND`, `entryPath(entry)`, `projectPath(project)`, `topicPath(slug)`; `escapeXml`, `buildRss`, `buildJsonFeed`, `buildLlms`, `buildSitemap`, `buildAll(root?): Record<string, string>`.
+- Consumes: `Entry`, `Project`, `Topic`, `SITE`, `entryPath`, `projectPath`, `topicPath` (all from Task 7's `routes.ts`).
+- Produces: `escapeXml`, `buildRss`, `buildJsonFeed`, `buildLlms`, `buildSitemap`, `buildAll(root?): Record<string, string>`.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -3698,48 +3713,15 @@ describe("buildLlms", () => {
 Run: `npx vitest run tests/content/routes.test.ts tests/scripts/feeds.test.ts`
 Expected: FAIL — modules cannot be resolved.
 
-- [ ] **Step 3: Write the shared route map, and use it in the card**
+- [ ] **Step 3: Confirm the shared route map is the only copy**
 
-`src/content/routes.ts`:
+`src/content/routes.ts` already exists from Task 7, and `Card`, `Lead`, `og.ts` and this script all import it. Before writing the script, confirm nothing re-declares it:
 
-```ts
-import type { Entry, Project } from "./load";
-
-export const SECTION_OF_KIND: Record<Entry["kind"], string> = {
-  essay: "essays",
-  note: "notes",
-  link: "notes",
-  video: "watch",
-};
-
-export function entryPath(entry: Entry): string {
-  return `/${SECTION_OF_KIND[entry.kind]}/${entry.slug}/`;
-}
-
-export function projectPath(project: Project): string {
-  return `/projects/${project.slug}/`;
-}
-
-export function topicPath(slug: string): string {
-  return `/topics/${slug}/`;
-}
+```bash
+grep -rn "essays\": \"essays\"\|essay: \"essays\"" src/ || echo "one copy only"
 ```
 
-In `src/components/Card.tsx`, replace the local `SECTION` constant and its use:
-
-```tsx
-/* before */
-const SECTION: Record<Entry["kind"], string> = {
-  essay: "essays", note: "notes", link: "notes", video: "watch",
-};
-...
-const href = `/${SECTION[entry.kind]}/${entry.slug}/`;
-
-/* after */
-import { entryPath } from "@/content/routes";
-...
-const href = entryPath(entry);
-```
+Expected: `one copy only`. If anything re-declares the map, delete the copy and import instead — a second map is how a link and its feed entry drift apart.
 
 - [ ] **Step 4: Write the build script**
 
@@ -4656,7 +4638,7 @@ The only permitted hit in *shipped content* is the `summary` prompt that `script
 **3. Type consistency**
 
 - `Entry.title` is non-optional everywhere after loading; `EntryFrontmatter.title` is optional. Task 4 is the only conversion point.
-- `entryPath` / `projectPath` are defined once in Task 12 and used by `Card` (Task 12 modifies it), `og.ts` (Task 13) and the feeds (Task 12). Tasks 7 and 10 briefly define their own `SECTION` maps — Task 12 removes `Card`'s copy; `Lead.tsx` in Task 8 keeps a local map for its five-line switch and is **not** refactored, because a fifth copy is cheaper than the churn at that point. If a reviewer objects, have Task 12 also update `Lead.tsx`.
+- `entryPath` / `projectPath` / `topicPath` are defined once, in Task 7's `src/content/routes.ts`, and imported by `Card`, `Lead`, `og.ts` and the feeds. No module keeps a second kind→section map; Task 12 Step 3 asserts this.
 - `FrontPage`'s assembled branch is narrowed with `Extract<FrontPage, { state: "assembled" }>` in `Rail`, which is the same type `FrontPageView` checks for.
 - `params` is `Promise<{ slug: string }>` in every dynamic route — the App Router convention this plan was written against, and Task 1 Step 1 exists to confirm or correct it.
 
