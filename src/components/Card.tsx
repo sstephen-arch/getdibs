@@ -17,7 +17,7 @@ export function Card({
   const href = entryPath(entry);
 
   return (
-    <article className="flex flex-col gap-3">
+    <article className="group relative flex flex-col gap-3">
       {/* The heading below is the item's accessible name. The plate repeats the
           title as a visual treatment, so the media is hidden rather than read
           to a screen reader twice. */}
@@ -42,7 +42,10 @@ export function Card({
         </time>
       </div>
       <h3 className="m-0 font-display text-xl font-semibold leading-snug">
-        <Link href={href} className="no-underline hover:underline hover:underline-offset-4">
+        <Link
+          href={href}
+          className="no-underline after:absolute after:inset-0 after:content-[''] hover:underline hover:underline-offset-4"
+        >
           {entry.title}
         </Link>
       </h3>

@@ -2,11 +2,11 @@ import type { Entry } from "@/content/load";
 import { KIND_LABELS } from "./KindTag";
 
 const TOPIC_COLOUR: Record<string, string> = {
-  "local-ai": "var(--highlight)",
+  "local-ai": "hsl(var(--highlight))",
 };
 
 export function topicColour(slug?: string): string {
-  return (slug && TOPIC_COLOUR[slug]) || "var(--primary)";
+  return (slug && TOPIC_COLOUR[slug]) || "hsl(var(--primary))";
 }
 
 const ASPECT = {

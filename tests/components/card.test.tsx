@@ -2,7 +2,7 @@
 import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { Card } from "@/components/Card";
-import { Plate } from "@/components/Plate";
+import { Plate, topicColour } from "@/components/Plate";
 import { entry } from "../helpers/fixtures";
 
 const NOW = new Date("2026-10-19T12:00:00Z");
@@ -20,6 +20,21 @@ describe("Plate", () => {
   it("labels the kind", () => {
     render(<Plate entry={entry({ kind: "video", title: "A talk" })} />);
     expect(screen.getByText(/Video/)).toBeTruthy();
+  });
+});
+
+describe("topicColour", () => {
+  it("returns a colour, not the bare token triple stored in globals.css", () => {
+    expect(topicColour("local-ai")).toBe("hsl(var(--highlight))");
+    expect(topicColour("an-unmapped-topic")).toBe("hsl(var(--primary))");
+    expect(topicColour()).toBe("hsl(var(--primary))");
+  });
+
+  it("always wraps its token in hsl()", () => {
+    for (const colour of [topicColour("local-ai"), topicColour("other"), topicColour()]) {
+      expect(colour).toMatch(/^hsl\(var\(--(highlight|primary)\)\)$/);
+      expect(colour).not.toMatch(/^\d+\s+\d+%\s+\d+%$/);
+    }
   });
 });
 
@@ -54,5 +69,24 @@ describe("Card", () => {
     );
     expect(video.querySelector("a")?.getAttribute("href")).toBe("/watch/v/");
     expect(essay.querySelector("a")?.getAttribute("href")).toBe("/essays/e/");
+  });
+
+  it("makes the whole card one link named by the title", () => {
+    const { container } = render(
+      <Card entry={entry({ slug: "one", kind: "note", title: "One target" })} now={NOW} />,
+    );
+    const anchors = container.querySelectorAll("a");
+
+    expect(anchors).toHaveLength(1);
+    expect(anchors[0].getAttribute("href")).toBe("/notes/one/");
+    expect(anchors[0].textContent).toBe("One target");
+    expect(screen.getByRole("link", { name: "One target" })).toBe(anchors[0]);
+    expect(container.querySelectorAll("a a")).toHaveLength(0);
+
+    // The anchor's own box is only the title; the pseudo-element stretches its
+    // hit area over the relatively-positioned article, including the media.
+    expect(container.querySelector("article")?.classList.contains("relative")).toBe(true);
+    expect(anchors[0].classList.contains("after:absolute")).toBe(true);
+    expect(anchors[0].classList.contains("after:inset-0")).toBe(true);
   });
 });
