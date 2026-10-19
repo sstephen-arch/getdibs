@@ -4391,36 +4391,7 @@ pages_build_output_dir = "out"
 
 - [ ] **Step 3: Seed enough real content that no band is a lie**
 
-Seven entries and two projects. Together they light the lead, the bunks, the feed, the Watch band (3 videos), the Projects band (2) and the Topics band (2 topics in use). Every file below is real prose you should replace — but replacing it later is editing, not building. **The three `video_id` values are placeholders; swap them for the videos you actually want before launch**, or the shelf embeds a video you did not choose.
-
-`content/entries/2026-10-19-what-this-is.md`:
-
-```markdown
----
-kind: essay
-title: "What this is"
-summary: "A personal publication about local AI and the things I build. Here is what to expect, and what will not be here."
-topics: ["building"]
----
-
-I build things and write down what I learn. Most of it is about AI that runs on
-hardware you own, and about taking a product from an idea to something people can
-install.
-
-This site is where the writing lives. It is not a company site, not a résumé, and
-not a newsletter funnel. If that changes, this paragraph will change first.
-
-## What to expect
-
-Essays when there is something worth arguing. Notes when there is not. A watch
-shelf of videos worth your time, with a line on why. Projects when something
-ships.
-
-## What not to expect
-
-No breaking-news coverage. No launch-day reactions. Nothing written to fill a
-calendar.
-```
+**The launch essay is already committed**: `content/entries/2026-10-19-the-compute-comes-back.md` (the Qwen piece). Do not overwrite it or re-seed it — the six entries below plus it make seven, and they light the lead (the newest essay), the bunks, the feed, the Watch band (3 videos), the Projects band (2) and the Topics band (both `local-ai` and `building` in use). Every file below is real prose you should replace — but replacing it later is editing, not building. **The three `video_id` values are placeholders; swap them for the videos you actually want before launch**, or the shelf embeds a video you did not choose.
 
 `content/entries/2026-10-18-local-models-got-good.md`:
 
@@ -4563,7 +4534,7 @@ Expected: `ok — 7 entries, 2 projects`. Then in the served site:
 
 1. `/` shows a lead, three bunks, a feed with the rail, and Watch / Projects / Topics bands.
 2. `/notes/` shows rows (it has three items, so it shows a grid — confirm the rule flips at three).
-3. `/essays/what-this-is/` is on the light stock; `/` is on the dark one.
+3. `/essays/the-compute-comes-back/` is on the light stock; `/` is on the dark one.
 4. `/watch/on-device-demo/` embeds without autoplay and links to YouTube.
 5. `/feed.xml` parses, `/llms.txt` reads sensibly.
 
