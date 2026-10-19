@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { StockShell } from "@/components/StockShell";
 import { loadProjects } from "@/content/load";
+import { projectPath } from "@/content/routes";
 
 export const metadata = { title: "Projects" };
 
@@ -24,7 +25,7 @@ export default function Page() {
                   {project.status} · {project.year}
                 </p>
                 <h2 className="m-0 font-display text-xl font-semibold">
-                  <Link href={`/projects/${project.slug}/`} className="no-underline hover:underline">{project.title}</Link>
+                  <Link href={projectPath(project)} className="no-underline hover:underline">{project.title}</Link>
                 </h2>
                 <p className="m-0 text-sm text-muted-foreground">{project.summary}</p>
               </li>
