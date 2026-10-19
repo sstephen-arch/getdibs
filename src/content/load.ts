@@ -27,6 +27,13 @@ export interface Project extends ProjectFrontmatter {
   file: string;
 }
 
+/** Every content failure names the path it failed on, so a permission or
+ *  wrong-type error still begins with the directory the author must fix. */
+function contentFailure(path: string, error: unknown): ContentError {
+  const message = error instanceof Error ? error.message : String(error);
+  return new ContentError(`${path}: ${message}`);
+}
+
 function markdownFiles(dir: string): string[] {
   let names: string[];
   try {
@@ -35,9 +42,19 @@ function markdownFiles(dir: string): string[] {
     // A missing directory means nothing has been published yet. Every other
     // failure (permissions, a file where a directory belongs) must still surface.
     if ((error as NodeJS.ErrnoException).code === "ENOENT") return [];
-    throw error;
+    throw contentFailure(dir, error);
   }
   return names.filter((name) => name.endsWith(".md")).sort();
+}
+
+/** Reading is IO, not parsing: a failure here is named with the path but never
+ *  relabelled as a YAML problem. */
+function readText(file: string): string {
+  try {
+    return readFileSync(file, "utf8");
+  } catch (error) {
+    throw contentFailure(file, error);
+  }
 }
 
 /** gray-matter throws a bare YAMLException; this puts the file back on the front
@@ -46,15 +63,14 @@ function parseFrontmatter(file: string, text: string): ReturnType<typeof matter>
   try {
     return matter(text);
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    throw new ContentError(`${file}: ${message}`);
+    throw contentFailure(file, error);
   }
 }
 
 export function loadEntries(dir = "content/entries"): Entry[] {
   const entries = markdownFiles(dir).map((name): Entry => {
     const file = join(dir, name);
-    const raw = parseFrontmatter(file, readFileSync(file, "utf8"));
+    const raw = parseFrontmatter(file, readText(file));
     const front = validateEntry(file, raw.data);
     const parsed = parseFilename(name);
     if (!parsed) {
@@ -81,7 +97,7 @@ export function loadEntries(dir = "content/entries"): Entry[] {
 export function loadProjects(dir = "content/projects"): Project[] {
   const projects = markdownFiles(dir).map((name): Project => {
     const file = join(dir, name);
-    const raw = parseFrontmatter(file, readFileSync(file, "utf8"));
+    const raw = parseFrontmatter(file, readText(file));
     const front = validateProject(file, raw.data);
     const slug = name.replace(/\.md$/, "").toLowerCase();
     return { ...front, slug, body: raw.content.trim(), file };

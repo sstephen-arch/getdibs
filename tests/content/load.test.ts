@@ -57,6 +57,16 @@ describe("loadEntries", () => {
     expect(loadEntries(join(root, "entries"))).toHaveLength(0);
   });
 
+  it("fails on an invalid draft instead of silently dropping it", () => {
+    write(
+      "entries/2026-10-19-bad-draft.md",
+      "---\nkind: video\ntitle: B\nsummary: s\nvideo_id: abc123\ndraft: true\n---\n\nx\n",
+    );
+    expect(() => loadEntries(join(root, "entries"))).toThrow(
+      /2026-10-19-bad-draft\.md: kind "video" requires "channel"/,
+    );
+  });
+
   it("fails the load with the file name when frontmatter is invalid", () => {
     write("entries/2026-10-19-bad.md", "---\nkind: video\ntitle: B\nsummary: s\nvideo_id: abc123\n---\n\nx\n");
     expect(() => loadEntries(join(root, "entries"))).toThrow(/2026-10-19-bad\.md: kind "video" requires "channel"/);
@@ -80,6 +90,24 @@ describe("loadEntries", () => {
 
     expect(thrown).toBeInstanceOf(ContentError);
     expect((thrown as Error).message.startsWith(`${file}: `)).toBe(true);
+    // The parser's own diagnosis must survive, not just any "file: ..." prefix.
+    expect((thrown as Error).message).toMatch(/flow collection/);
+  });
+
+  it("names the file when it cannot be read", () => {
+    const file = join(root, "entries/2026-01-01-dir.md");
+    mkdirSync(file);
+
+    let thrown: unknown;
+    try {
+      loadEntries(join(root, "entries"));
+    } catch (error) {
+      thrown = error;
+    }
+
+    expect(thrown).toBeInstanceOf(ContentError);
+    expect((thrown as Error).message.startsWith(`${file}: `)).toBe(true);
+    expect((thrown as Error).message).toMatch(/EISDIR/);
   });
 
   it("fails on two entries with the same slug", () => {
@@ -87,6 +115,14 @@ describe("loadEntries", () => {
     write("entries/2026-02-01-dup.md", "---\nkind: note\nsummary: s\n---\n\nx\n");
     expect(() => loadEntries(join(root, "entries"))).toThrow(
       /2026-02-01-dup\.md: duplicate entry slug "dup"/,
+    );
+  });
+
+  it("fails on two entries whose slugs collide only by case", () => {
+    write("entries/2026-01-01-Hello.md", "---\nkind: note\nsummary: s\n---\n\nx\n");
+    write("entries/2026-02-01-hello.md", "---\nkind: note\nsummary: s\n---\n\nx\n");
+    expect(() => loadEntries(join(root, "entries"))).toThrow(
+      /2026-02-01-hello\.md: duplicate entry slug "hello"/,
     );
   });
 
@@ -122,10 +158,20 @@ describe("loadContent", () => {
 
   it("still fails when the projects path is a file, not a directory", () => {
     write("entries/2026-10-19-a.md", "---\nkind: note\nsummary: s\n---\n\nx\n");
-    rmSync(join(root, "projects"), { recursive: true, force: true });
-    writeFileSync(join(root, "projects"), "not a directory");
+    const projects = join(root, "projects");
+    rmSync(projects, { recursive: true, force: true });
+    writeFileSync(projects, "not a directory");
 
-    expect(() => loadContent(root)).toThrow(/ENOTDIR/);
+    let thrown: unknown;
+    try {
+      loadContent(root);
+    } catch (error) {
+      thrown = error;
+    }
+
+    expect(thrown).toBeInstanceOf(ContentError);
+    expect((thrown as Error).message.startsWith(`${projects}: `)).toBe(true);
+    expect((thrown as Error).message).toMatch(/ENOTDIR/);
   });
 
   it.skipIf(CASE_INSENSITIVE)("fails on two projects with the same slug", () => {
