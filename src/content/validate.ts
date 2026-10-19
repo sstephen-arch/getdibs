@@ -38,6 +38,22 @@ function requiredString(file: string, data: Record<string, unknown>, field: stri
   return optionalString(file, data, field) ?? fail(file, `requires "${field}"`);
 }
 
+/** A URL that reaches an embed or an outbound anchor must be absolute and
+ *  http(s), so a frontmatter typo fails the build with the file and field
+ *  named rather than throwing at render time. */
+function absoluteHttpUrl(file: string, value: string, field: string): string {
+  let parsed: URL;
+  try {
+    parsed = new URL(value);
+  } catch {
+    return fail(file, `"${field}" must be an absolute http or https URL, got "${value}"`);
+  }
+  if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+    fail(file, `"${field}" must be an absolute http or https URL, got "${value}"`);
+  }
+  return value;
+}
+
 function optionalDate(file: string, data: Record<string, unknown>, field: string): string | undefined {
   const value = optionalString(file, data, field);
   if (value === undefined) return undefined;
@@ -81,7 +97,9 @@ export function validateEntry(file: string, input: unknown): EntryFrontmatter {
   }
 
   if (kind === "link") {
-    if (!optionalString(file, input, "url")) fail(file, `kind "link" requires "url"`);
+    const url = optionalString(file, input, "url");
+    if (!url) fail(file, `kind "link" requires "url"`);
+    absoluteHttpUrl(file, url, "url");
     if (!optionalString(file, input, "source")) fail(file, `kind "link" requires "source"`);
   }
 
@@ -91,6 +109,9 @@ export function validateEntry(file: string, input: unknown): EntryFrontmatter {
     }
     if (!optionalString(file, input, "channel")) fail(file, `kind "video" requires "channel"`);
   }
+
+  const videoUrl = optionalString(file, input, "video_url");
+  if (videoUrl !== undefined) absoluteHttpUrl(file, videoUrl, "video_url");
 
   return {
     kind: kind as Kind,

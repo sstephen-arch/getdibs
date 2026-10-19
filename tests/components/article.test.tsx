@@ -41,6 +41,23 @@ describe("Article", () => {
     expect(link.getAttribute("rel")).toContain("noopener");
   });
 
+  it("renders a link's hostname alongside the named source", () => {
+    render(
+      <Article
+        entry={entry({
+          kind: "link",
+          title: "Worth reading",
+          url: "https://example.com/a",
+          source: "The Verge",
+          slug: "host",
+        })}
+        html=""
+        now={NOW}
+      />,
+    );
+    expect(screen.getByText(/example\.com/)).toBeTruthy();
+  });
+
   it("embeds a video without autoplay", () => {
     const { container } = render(
       <Article

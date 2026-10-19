@@ -33,6 +33,42 @@ describe("validateEntry", () => {
       .toBe("https://x.test");
   });
 
+  it("rejects a link url that is not an absolute http(s) URL", () => {
+    expect(() =>
+      validateEntry("content/entries/l.md", {
+        ...base,
+        kind: "link",
+        url: "example.com/a",
+        source: "The Verge",
+      }),
+    ).toThrow(/^content\/entries\/l\.md: .*url/);
+    expect(() =>
+      validateEntry("content/entries/l.md", {
+        ...base,
+        kind: "link",
+        url: "javascript:alert(1)",
+        source: "The Verge",
+      }),
+    ).toThrow(/^content\/entries\/l\.md: .*url/);
+  });
+
+  it("accepts an absolute https link url", () => {
+    expect(
+      validateEntry("l.md", { ...base, kind: "link", url: "https://example.com/a", source: "The Verge" }).url,
+    ).toBe("https://example.com/a");
+  });
+
+  it("rejects a video_url that is not an absolute http(s) URL", () => {
+    expect(() =>
+      validateEntry("v.md", {
+        ...base,
+        kind: "video",
+        video_url: "youtube.com/watch?v=abc123",
+        channel: "Some Channel",
+      }),
+    ).toThrow(/^v\.md: .*video_url/);
+  });
+
   it("requires an id or url and a channel on a video", () => {
     expect(() => validateEntry("v.md", { ...base, kind: "video", channel: "Some Channel" }))
       .toThrow(/kind "video" requires "video_id" or "video_url"/);

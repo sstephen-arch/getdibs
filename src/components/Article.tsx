@@ -12,8 +12,19 @@ export function videoIdOf(entry: Entry): string | null {
   return match ? match[1] : null;
 }
 
+/** Hostname for a link-out. Frontmatter is validated at load time, so a bad URL
+ *  never reaches here; the try keeps a render from throwing if one ever does. */
+function hostnameOf(url: string): string | null {
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return null;
+  }
+}
+
 export function Article({ entry, html, now }: { entry: Entry; html: string; now: Date }) {
   const videoId = entry.kind === "video" ? videoIdOf(entry) : null;
+  const linkHost = entry.kind === "link" && entry.url ? hostnameOf(entry.url) : null;
 
   return (
     <article className="mx-auto max-w-3xl px-5 py-10">
@@ -47,9 +58,9 @@ export function Article({ entry, html, now }: { entry: Entry; html: string; now:
       {entry.kind === "link" && entry.url && (
         <p className="record mb-6 text-sm text-muted-foreground">
           <a href={entry.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">
-            {entry.source ?? new URL(entry.url).hostname}
+            {entry.source}
           </a>
-          {entry.source && <span> · {new URL(entry.url).hostname}</span>}
+          {linkHost && <span> · {linkHost}</span>}
         </p>
       )}
 
