@@ -82,6 +82,41 @@ describe("Article", () => {
     );
     expect(container.querySelector("article")?.innerHTML).toContain("Why this is worth watching.");
   });
+
+  it("names the author in a byline line of its own, not in the record row", () => {
+    const { container } = render(
+      <Article entry={entry({ kind: "essay", title: "On-device", slug: "byline" })} html="" now={NOW} />,
+    );
+    const byline = [...container.querySelectorAll("p")].find((p) => p.textContent?.startsWith("By "));
+
+    expect(byline?.textContent).toBe("By Shem Stephen");
+    // The record row is 11px mono; the byline is UI type at body size, because a
+    // byline nobody can read is not a byline.
+    expect(byline?.className).toContain("font-ui");
+    expect(byline?.className).toContain("text-sm");
+  });
+
+  it("labels the way out of a link item as the original", () => {
+    render(
+      <Article
+        entry={entry({ kind: "link", title: "Worth reading", url: "https://x.test/a", source: "The Verge", slug: "lbl" })}
+        html=""
+        now={NOW}
+      />,
+    );
+    expect(screen.getByRole("link", { name: /Read the original at The Verge/ })).toBeTruthy();
+  });
+
+  it("still labels the original when a link names no publication", () => {
+    render(
+      <Article
+        entry={entry({ kind: "link", title: "Worth reading", url: "https://example.com/b", slug: "nosrc" })}
+        html=""
+        now={NOW}
+      />,
+    );
+    expect(screen.getByRole("link", { name: /Read the original/ })).toBeTruthy();
+  });
 });
 
 describe("VideoEmbed", () => {

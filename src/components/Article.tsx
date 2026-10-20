@@ -28,7 +28,7 @@ export function Article({ entry, html, now }: { entry: Entry; html: string; now:
 
   return (
     <article className="mx-auto max-w-3xl px-5 py-10">
-      <div className="flex items-baseline gap-3">
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <KindTag kind={entry.kind} />
         <time className="record text-[0.6875rem] text-muted-foreground" dateTime={entry.date}>
           {formatWhen(`${entry.date}T12:00:00Z`, now)}
@@ -38,16 +38,19 @@ export function Article({ entry, html, now }: { entry: Entry; html: string; now:
             · Updated {formatWhen(`${entry.updated}T12:00:00Z`, now)}
           </span>
         )}
-        {/* Byline from frontmatter, with the site author as the default, so an
-            essay never prints without a name against it. */}
-        <span className="record text-[0.6875rem] text-muted-foreground">
-          · {entry.author ?? SITE.author}
-        </span>
       </div>
 
       <h1 className="mt-4 mb-3 font-display text-[clamp(2rem,4.5vw,3rem)] font-semibold leading-[1.08] tracking-tight">
         {entry.title}
       </h1>
+
+      {/* Who wrote this, on its own line above the standfirst. It used to sit in
+          the record row with the date, at 11px, which is not an answer to "who
+          wrote this" — it is a place to hide one. */}
+      <p className="m-0 mb-5 font-ui text-sm text-muted-foreground">
+        {"By "}
+        <span className="font-medium text-foreground">{entry.author ?? SITE.author}</span>
+      </p>
 
       {entry.summary && (
         <p className="measure m-0 mb-6 font-display text-xl leading-relaxed text-muted-foreground">
@@ -55,12 +58,22 @@ export function Article({ entry, html, now }: { entry: Entry; html: string; now:
         </p>
       )}
 
+      {/* For a link, the point of the page is the piece it points at, so the way
+          out is a labelled control rather than a bare underlined hostname. The
+          hostname stays visible next to it: the name says which publication, the
+          hostname says which site, and they are not always the same thing. */}
       {entry.kind === "link" && entry.url && (
-        <p className="record mb-6 text-sm text-muted-foreground">
-          <a href={entry.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">
-            {entry.source}
+        <p className="m-0 mb-6 flex flex-wrap items-baseline gap-x-3 gap-y-2 font-ui text-sm">
+          <a
+            href={entry.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-baseline gap-2 rounded-control border border-border px-3 py-1.5 text-foreground no-underline hover:border-highlight"
+          >
+            Read the original{entry.source ? ` at ${entry.source}` : ""}
+            <span aria-hidden className="text-muted-foreground">↗</span>
           </a>
-          {linkHost && <span> · {linkHost}</span>}
+          {linkHost && <span className="record text-muted-foreground">{linkHost}</span>}
         </p>
       )}
 

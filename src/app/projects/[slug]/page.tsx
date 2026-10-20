@@ -6,6 +6,7 @@ import { loadContent } from "@/content/load";
 import { renderMarkdown } from "@/content/render";
 import { entryPath, placeholderSlug } from "@/content/routes";
 import { projectMetadata } from "@/lib/og";
+import { SITE } from "@/lib/site";
 
 export const dynamicParams = false;
 
@@ -42,6 +43,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <h1 className="mt-3 mb-3 font-display text-[clamp(2rem,4.5vw,3rem)] font-semibold leading-[1.08] tracking-tight">
           {project.title}
         </h1>
+        {/* Projects have no author field: they are all this author's, and saying
+            so is the point. */}
+        <p className="m-0 mb-5 font-ui text-sm text-muted-foreground">
+          {"By "}
+          <span className="font-medium text-foreground">{SITE.author}</span>
+        </p>
         <p className="measure m-0 mb-6 font-display text-xl leading-relaxed text-muted-foreground">
           {project.summary}
         </p>
