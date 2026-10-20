@@ -1,5 +1,5 @@
 import { IndexList } from "@/components/IndexList";
-import { StockShell } from "@/components/StockShell";
+import { SiteShell } from "@/components/SiteShell";
 import { loadContent } from "@/content/load";
 
 export const metadata = { title: "Archive" };
@@ -7,8 +7,8 @@ export const metadata = { title: "Archive" };
 export default function Page() {
   const { entries } = loadContent();
   return (
-    <StockShell stock="wire">
-      <IndexList title="Archive" items={entries} emptyLabel="Nothing published yet." now={new Date()} />
-    </StockShell>
+    <SiteShell>
+      <IndexList path="~/archive" title="Archive" intro="Everything published, newest first." items={entries} emptyLabel="Nothing published yet." now={new Date()} />
+    </SiteShell>
   );
 }

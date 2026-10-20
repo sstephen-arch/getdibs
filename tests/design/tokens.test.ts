@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { READING, WIRE, readTokenScopes } from "../helpers/tokens";
+import { ROOT, readTokenScopes } from "../helpers/tokens";
 
-/* Copied verbatim from spec §7.2. If a value drifts from depaloconsultingllc.com,
-   this test is the thing that notices. */
+/* Copied verbatim from depaloconsultingllc.com's light `:root` (spec §7.2). If a
+   value drifts from the source site, this test is the thing that notices. */
 const EXPECTED = {
-  [READING]: {
+  [ROOT]: {
     background: "36 33% 97%",
     foreground: "40 6% 10%",
     card: "0 0% 100%",
@@ -27,29 +27,6 @@ const EXPECTED = {
     highlight: "32 95% 44%",
     live: "149 66% 30%",
   },
-  [WIRE]: {
-    background: "40 7% 8%",
-    foreground: "40 27% 93%",
-    card: "30 7% 11%",
-    "card-foreground": "40 27% 93%",
-    popover: "30 7% 11%",
-    "popover-foreground": "40 27% 93%",
-    primary: "226 82% 72%",
-    "primary-foreground": "222 55% 13%",
-    secondary: "34 8% 17%",
-    "secondary-foreground": "40 27% 93%",
-    muted: "34 8% 17%",
-    "muted-foreground": "39 7% 61%",
-    accent: "34 8% 17%",
-    "accent-foreground": "40 27% 93%",
-    destructive: "0 72% 60%",
-    "destructive-foreground": "0 0% 98%",
-    border: "34 8% 17%",
-    input: "34 8% 17%",
-    ring: "226 82% 72%",
-    highlight: "38 92% 58%",
-    live: "149 49% 49%",
-  },
 } as const;
 
 describe("ported tokens", () => {
@@ -64,6 +41,10 @@ describe("ported tokens", () => {
       }
     });
   }
+
+  it("declares one stock and no dark scope", () => {
+    expect(Object.keys(scopes)).toEqual([ROOT]);
+  });
 
   it("does not port depalo's chart tokens", () => {
     const all = Object.values(scopes).flatMap(Object.keys);

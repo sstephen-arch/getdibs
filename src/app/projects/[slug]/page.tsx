@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { StockShell } from "@/components/StockShell";
+import { SiteShell } from "@/components/SiteShell";
 import { Prose } from "@/components/Prose";
+import { StatusPill } from "@/components/ProjectCard";
+import { SectionHeader } from "@/components/SectionHeader";
 import { loadContent } from "@/content/load";
 import { renderMarkdown } from "@/content/render";
 import { entryPath, placeholderSlug } from "@/content/routes";
@@ -34,13 +37,17 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const updates = entries.filter((entry) => entry.project === project.slug);
 
   return (
-    <StockShell stock="reading">
+    <SiteShell section="projects">
       <article className="mx-auto max-w-3xl px-5 py-10">
-        <p className="record m-0 text-[0.6875rem] uppercase tracking-[0.13em] text-muted-foreground">
-          {project.status} · {project.year}
-          {project.role ? ` · ${project.role}` : ""}
-        </p>
-        <h1 className="mt-3 mb-3 font-display text-[clamp(2rem,4.5vw,3rem)] font-semibold leading-[1.08] tracking-tight">
+        <nav aria-label="Breadcrumb" className="record mb-6 text-[0.75rem] text-muted-foreground">
+          <Link href="/" className="no-underline hover:text-primary">~</Link>
+          {" / "}
+          <Link href="/projects/" className="no-underline hover:text-primary">projects</Link>
+          {" / "}
+          <span className="text-foreground">{project.slug}</span>
+        </nav>
+        <StatusPill project={project} />
+        <h1 className="mt-4 mb-3 font-display text-[clamp(2rem,4.5vw,3rem)] font-semibold leading-[1.08] tracking-tight">
           {project.title}
         </h1>
         {/* Projects have no author field: they are all this author's, and saying
@@ -61,32 +68,42 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block rounded-control border border-border px-3 py-1.5 font-ui text-sm no-underline hover:border-highlight"
+                  className="inline-flex items-center gap-2 rounded-control border border-border bg-card px-3 py-1.5 font-ui text-sm font-medium no-underline shadow-sm hover:border-primary/50 hover:text-primary"
                 >
                   {link.label}
+                  <span aria-hidden className="text-muted-foreground">↗</span>
                 </a>
               </li>
             ))}
           </ul>
         )}
 
-        <div className="measure">
-          <Prose html={await renderMarkdown(project.body)} />
-        </div>
+        {project.body && (
+          <div className="measure border-t border-border pt-8">
+            <Prose html={await renderMarkdown(project.body)} />
+          </div>
+        )}
 
         {updates.length > 0 && (
-          <section className="mt-12 border-t border-border pt-6">
-            <h2 className="m-0 mb-3 font-display text-xl font-semibold">Updates</h2>
+          <section className="mt-12">
+            <SectionHeader label="Updates" />
             <ul className="m-0 flex list-none flex-col gap-2 p-0">
               {updates.map((entry) => (
                 <li key={entry.slug}>
-                  <a href={entryPath(entry)} className="no-underline hover:underline">{entry.title}</a>
+                  <Link href={entryPath(entry)} className="no-underline hover:text-primary">{entry.title}</Link>
                 </li>
               ))}
             </ul>
           </section>
         )}
+
+        <p className="measure mt-14 mb-0 flex flex-wrap justify-between gap-3 border-t border-border pt-6 font-ui text-sm text-muted-foreground">
+          <Link href="/projects/" className="no-underline hover:text-primary">← All projects</Link>
+          <a href={`${SITE.repo}/blob/main/${project.file}`} className="record text-[0.75rem] no-underline hover:text-primary">
+            view source: {project.file} ↗
+          </a>
+        </p>
       </article>
-    </StockShell>
+    </SiteShell>
   );
 }

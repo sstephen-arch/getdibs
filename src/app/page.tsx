@@ -1,5 +1,5 @@
 import { FrontPageView } from "@/components/FrontPageView";
-import { StockShell } from "@/components/StockShell";
+import { SiteShell } from "@/components/SiteShell";
 import { assembleFrontPage } from "@/content/frontpage";
 import { loadContent } from "@/content/load";
 
@@ -7,8 +7,8 @@ export default function Page() {
   const { entries, projects } = loadContent();
   const page = assembleFrontPage(entries, projects);
   return (
-    <StockShell stock="wire">
+    <SiteShell>
       <FrontPageView page={page} now={new Date()} />
-    </StockShell>
+    </SiteShell>
   );
 }

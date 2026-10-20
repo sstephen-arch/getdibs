@@ -22,6 +22,12 @@ export const TOPICS: Topic[] = [
       "Models that run on hardware you own, and what that changes about what you can build.",
   },
   {
+    slug: "claude-code",
+    name: "Claude Code",
+    description:
+      "Building with an AI agent every day: what it costs, how the work actually flows, and what holds up.",
+  },
+  {
     slug: "building",
     name: "Building",
     description:

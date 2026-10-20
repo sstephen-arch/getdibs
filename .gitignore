@@ -12,3 +12,6 @@ public/feed.xml
 public/feed.json
 public/sitemap.xml
 public/llms.txt
+
+# Written by `next dev` (generate-agent-files.js); not part of the site.
+AGENTS.md

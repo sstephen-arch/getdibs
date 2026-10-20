@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatWhen } from "@/lib/format";
+import { formatWhen, readingMinutes } from "@/lib/format";
 
 const NOW = new Date("2026-10-19T12:00:00Z");
 
@@ -28,5 +28,21 @@ describe("formatWhen", () => {
 
   it("adds the year when it differs from now", () => {
     expect(formatWhen("2025-03-12T12:00:00Z", NOW)).toBe("12 March 2025");
+  });
+});
+
+describe("readingMinutes", () => {
+  it("never says zero", () => {
+    expect(readingMinutes("")).toBe(1);
+    expect(readingMinutes("A short note.")).toBe(1);
+  });
+
+  it("counts at 230 words a minute", () => {
+    expect(readingMinutes("word ".repeat(2300))).toBe(10);
+  });
+
+  it("does not count table pipes or rule dashes as words", () => {
+    const table = "| a | b |\n|---|---|\n| c | d |";
+    expect(readingMinutes(`${"word ".repeat(229)}${table}`)).toBe(1);
   });
 });

@@ -27,7 +27,7 @@ Decided against, with reasons — not deferred by omission:
 | Not building | Why |
 |---|---|
 | Comments | Conversation happens where the link is shared. Moderation would be a second job. |
-| Light/dark toggle | The stock is chosen by what the reader is *doing*, not by preference. A toggle would let a reader turn the newsroom into a blog. |
+| Light/dark toggle | There is one light stock (§7.1, amended 2026-10-20). A toggle would bring back the dark surface the owner chose to retire. |
 | Search | Unnecessary at 20 items, necessary at 200. Phase 2, client-side, over generated JSON. |
 | Newsletter capture | External service. `/subscribe` links out. RSS is the first-party subscription. |
 | Multi-author | It is one author. `author` exists in frontmatter from day one so nothing needs migrating later. |
@@ -154,19 +154,34 @@ Relative for the first 48 hours (`3 hours ago`), absolute dates after (`12 March
 
 Design source of truth is **depaloconsultingllc.com**. Tokens and type are ported, not reinvented. The framework is not ported: that site is SvelteKit, this one is Next.js.
 
-### 7.1 Two stocks, one rule
+### 7.1 One stock (amended 2026-10-20)
 
-**The wire (dark) is for anything the reader scans in a list. The reading stock (light) is for any single item the reader has opened.**
+> **Amended 2026-10-20 by the owner.** The original rule split the site into a dark
+> *wire* for index pages and a light *reading* stock for single items. In use, the
+> dark wire made the site harder to read and did not look like Depalo. It is
+> retired: **every page is Depalo's light paper-and-ink stock.** The `Stock` column
+> in §4 is historical.
 
-Applied by route type, not per page: index routes are wire, `[slug]` routes are reading, `/about` and `/subscribe` are reading. There is exactly one crossing, and it happens when the reader decides to read something.
+What replaced the wire's job of making lists feel different from reading:
 
-**No manual toggle.** `prefers-color-scheme` is respected for contrast on the reading stock; it does not flip surfaces.
+- **Sections are numbered and ruled.** Every band opens with a mono eyebrow
+  (`01 / LATEST`) and a hairline to the right edge, numbered from the bands that
+  actually render, so the sparse rule (§6.2) never leaves a gap in the count.
+- **Lists are white panels on paper.** Cards and log rows sit on `--card` with a
+  border and a light shadow, as on Depalo's service grid; the page is `--background`.
+- **The masthead is white, sticky and ruled**, and marks the current section.
+- **Developer furniture is first class:** breadcrumbs as paths (`~ / essays / slug`),
+  an "On this page" list on long items, a link from every item to its markdown
+  source on GitHub, and a lead plate that shows the item's real frontmatter
+  instead of repeating its title.
+
+No toggle and no dark mode: `prefers-color-scheme` does not flip the surface.
 
 ### 7.2 Tokens — ported verbatim
 
-Token *names and values* are copied unchanged from Depalo into a single `tokens.css`, so a change on either site is a copy-paste. HSL triplet convention, `hsl(var(--x))` at point of use.
+Token *names and values* are copied unchanged from Depalo's light `:root` into the token region of `globals.css`, so a change on either site is a copy-paste. HSL triplet convention, `hsl(var(--x))` at point of use.
 
-**Light (reading stock):**
+**Light (the only stock since 2026-10-20):**
 
 ```
 --background: 36 33% 97%      --foreground: 40 6% 10%
@@ -182,7 +197,7 @@ Token *names and values* are copied unchanged from Depalo into a single `tokens.
 --highlight: 32 95% 44%       --live: 149 66% 30%
 ```
 
-**Dark (wire):**
+**Dark (wire) — retired 2026-10-20, kept for the record:**
 
 ```
 --background: 40 7% 8%        --foreground: 40 27% 93%
@@ -252,9 +267,9 @@ Cloudflare Web Analytics. No cookies, therefore no consent banner. No third-part
 
 Non-negotiable, and verified rather than assumed:
 
-- WCAG AA contrast on **both** stocks — the dark wire is the higher risk and must be checked, not eyeballed.
+- WCAG AA contrast on the stock — checked, not eyeballed.
 - Semantic landmarks: one `h1` per page, `nav`/`main`/`article`/`aside`, skip-to-content link.
-- Keyboard operable throughout, visible focus rings on both stocks.
+- Keyboard operable throughout, visible focus rings.
 - `prefers-reduced-motion` respected for any scroll or reveal animation — the source site uses scroll-reveal, and the same courtesy applies here.
 - Video embeds are lazy, are never autoplay, and carry a text link to the source.
 - Timestamps use `<time datetime>`.
@@ -265,7 +280,7 @@ Non-negotiable, and verified rather than assumed:
 - **Sparse states:** render the front page, `/watch`, `/projects` and `/topics/*` against fixtures of **1, 2, 3 and 30** items and assert that no band renders under its minimum and no empty box appears.
 - **Lead selection:** tested for all three cases (explicit `lead`, newest essay, newest any).
 - **Note headline derivation:** tested for the no-title case, including a body with no full stop.
-- **Contrast:** AA verified on both stocks programmatically.
+- **Contrast:** AA verified programmatically.
 - **Static export:** `out/` contains every route; no route returns an error; content pages ship minimal JS.
 - **Feeds:** RSS validates; sitemap contains exactly the published routes and no drafts.
 - **OG fetch:** `new link` handles a page with no OG tags without crashing.

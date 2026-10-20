@@ -28,3 +28,10 @@ export function formatWhen(iso: string, now: Date): string {
     timeZone: "UTC",
   }).format(then);
 }
+
+/** Minutes to read a markdown body at 230 words a minute, never less than one.
+ *  Table pipes and code fences are not words, so they are not counted. */
+export function readingMinutes(body: string): number {
+  const words = body.replace(/[|`#>*_]+|-{2,}/g, " ").split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 230));
+}
