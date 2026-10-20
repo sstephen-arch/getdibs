@@ -3,9 +3,9 @@ kind: essay
 title: "Testing local models on my own machine"
 summary: "Twelve coding problems, a speed test and two full app builds against local models, and what the failures showed. Every number is a recorded test result rather than a model’s account of its own work."
 topics: ["local-ai"]
-cover: "/covers/local-model-tests.webp"
-cover_alt: "A terminal window over an orange chip graphic, showing a speed benchmark for Qwen3.8-27B-8bit: load 0.14 s, write 50.5 tokens a second, read 988 tokens a second, 134 tokens a second with four requests at once, and a code score of 17 out of 18."
-cover_credit: "Cover: illustration by the author, using figures from this test run."
+cover: "/covers/local-ai.webp"
+cover_alt: "Illustration of a MacBook whose screen shows a wireframe cube filled with glowing dots, standing for a model running on the laptop."
+cover_credit: "Cover: illustration by the author."
 ---
 
 I run models on my own machine and I want to know what they can be trusted with.
