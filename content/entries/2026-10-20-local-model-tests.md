@@ -6,6 +6,16 @@ topics: ["local-ai"]
 cover: "/covers/local-ai.webp"
 cover_alt: "Illustration of a MacBook whose screen shows a wireframe cube filled with glowing dots, standing for a model running on the laptop."
 cover_credit: "Cover: illustration by the author."
+stats:
+  - value: "21"
+    label: "local models tested"
+    detail: "Quantized builds of one model counted once"
+  - value: "2"
+    label: "Macs"
+    detail: "An M5 Max with 128 GB, and a 64 GB Mac before it"
+  - value: "13"
+    label: "days of testing"
+    detail: "2 to 18 October 2026"
 ---
 
 I run models on my own machine and I want to know what they can be trusted with.
@@ -13,7 +23,7 @@ So I built a harness. It gives a model work I can grade, runs it against a local
 server, and writes down what happened. Most of what it has written down is
 failure.
 
-Nothing here is a leaderboard. It is one Mac, a small number of runs, and a set
+Nothing here is a leaderboard. It is two Macs, a small number of runs, and a set
 of results I did not expect.
 
 ## What it runs
@@ -96,7 +106,7 @@ a better result.
 
 ## Speed
 
-Same Mac, one engine at a time, thinking off. Writing and reading are measured
+One Mac, one engine at a time, thinking off. Writing and reading are measured
 separately, and the gap between them is much larger than the gap in writing
 speed.
 
