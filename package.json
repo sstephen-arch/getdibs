@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "tsx scripts/build-feeds.ts && next build",
     "test": "vitest run",
-    "check": "tsx scripts/check.ts"
+    "check": "tsx scripts/check.ts",
+    "new": "tsx scripts/new.ts"
   },
   "dependencies": {
     "gray-matter": "4.0.3",
