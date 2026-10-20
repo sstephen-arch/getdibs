@@ -31,5 +31,5 @@ export function readTokenScopes(): Record<string, Record<string, string>> {
   return scopes;
 }
 
-export const WIRE = '[data-stock="wire"]';
-export const READING = '[data-stock="reading"]';
+/** The one stock. The dark wire was retired on 2026-10-20; every page is paper. */
+export const ROOT = ":root";

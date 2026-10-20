@@ -1,10 +1,11 @@
 @import "tailwindcss";
 
-/* Ported verbatim from depaloconsultingllc.com. Same names, same values, so a
-   change on either site is a copy-paste. Depalo's --chart-1..6 are deliberately
-   not ported: there are no charts here. */
+/* Ported verbatim from depaloconsultingllc.com's light theme. Same names, same
+   values, so a change on either site is a copy-paste. There is one stock: the dark
+   wire was retired on 2026-10-20, so every page is paper and ink, like the source
+   site. Depalo's --chart-1..6 are deliberately not ported: there are no charts. */
 /* --tokens-start-- */
-[data-stock="reading"] {
+:root {
   --background: 36 33% 97%;
   --foreground: 40 6% 10%;
   --card: 0 0% 100%;
@@ -27,35 +28,10 @@
   --highlight: 32 95% 44%;
   --live: 149 66% 30%;
 }
-
-[data-stock="wire"] {
-  --background: 40 7% 8%;
-  --foreground: 40 27% 93%;
-  --card: 30 7% 11%;
-  --card-foreground: 40 27% 93%;
-  --popover: 30 7% 11%;
-  --popover-foreground: 40 27% 93%;
-  --primary: 226 82% 72%;
-  --primary-foreground: 222 55% 13%;
-  --secondary: 34 8% 17%;
-  --secondary-foreground: 40 27% 93%;
-  --muted: 34 8% 17%;
-  --muted-foreground: 39 7% 61%;
-  --accent: 34 8% 17%;
-  --accent-foreground: 40 27% 93%;
-  --destructive: 0 72% 60%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 34 8% 17%;
-  --input: 34 8% 17%;
-  --ring: 226 82% 72%;
-  --highlight: 38 92% 58%;
-  --live: 149 49% 49%;
-}
 /* --tokens-end-- */
 
 /* `inline` is load-bearing, exactly as it is in the existing Starkive project: the
-   generated utilities must carry the value, not a second level of var() indirection
-   over a token that a nested stock scope re-declares. */
+   generated utilities carry the value, not a second level of var() indirection. */
 @theme inline {
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -83,6 +59,7 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  scroll-padding-top: 5rem;
 }
 
 body {
@@ -99,9 +76,170 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-/* The reading measure. Long-form only; the wire stays wide and dense. */
+/* The reading measure. Long-form only; index pages stay wide and dense. */
 .measure {
   max-width: 68ch;
+}
+
+/* The mono uppercase label that heads every section, carried over from Depalo's
+   `.eyebrow`. On this site it also carries the section number, so a page reads
+   as numbered parts rather than one long scroll. */
+.eyebrow {
+  font-family: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: hsl(var(--primary));
+}
+
+/* Long-form body. Serif at a comfortable size, with the developer furniture
+   (code, tables, rules) set in the UI and mono faces so it reads as a record. */
+.prose-body {
+  font-family: var(--font-source-serif), ui-serif, Georgia, serif;
+  font-size: 1.125rem;
+  line-height: 1.75;
+  color: hsl(var(--foreground));
+}
+.prose-body > :first-child {
+  margin-top: 0;
+}
+.prose-body p {
+  margin: 1.1em 0;
+}
+.prose-body h2 {
+  margin: 2.6em 0 0.6em;
+  padding-top: 1.1em;
+  border-top: 1px solid hsl(var(--border));
+  font-size: 1.625rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  scroll-margin-top: 5rem;
+}
+.prose-body h3 {
+  margin: 2em 0 0.5em;
+  font-size: 1.25rem;
+  font-weight: 600;
+  scroll-margin-top: 5rem;
+}
+.prose-body a {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+  text-decoration-color: hsl(var(--primary) / 0.35);
+  text-underline-offset: 4px;
+}
+.prose-body a:hover {
+  text-decoration-color: hsl(var(--primary));
+}
+.prose-body strong {
+  font-weight: 600;
+}
+.prose-body ul,
+.prose-body ol {
+  margin: 1.1em 0;
+  padding-left: 1.4em;
+}
+.prose-body ul {
+  list-style: disc;
+}
+.prose-body ol {
+  list-style: decimal;
+}
+.prose-body li {
+  margin: 0.4em 0;
+  padding-left: 0.2em;
+}
+.prose-body li::marker {
+  color: hsl(var(--muted-foreground));
+}
+.prose-body blockquote {
+  margin: 1.6em 0;
+  padding: 0.2em 0 0.2em 1.1em;
+  border-left: 3px solid hsl(var(--primary));
+  color: hsl(var(--muted-foreground));
+}
+.prose-body hr {
+  margin: 2.5em 0;
+  border: 0;
+  border-top: 1px solid hsl(var(--border));
+}
+.prose-body img {
+  margin: 2em 0;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+}
+.prose-body code {
+  font-family: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.84em;
+  padding: 0.12em 0.36em;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.3rem;
+  background: hsl(var(--muted));
+  overflow-wrap: anywhere;
+}
+.prose-body pre {
+  margin: 1.6em 0;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  background: hsl(var(--muted));
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.prose-body pre code {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: inherit;
+  overflow-wrap: normal;
+}
+
+/* Tables are where the numbers live, so they get the UI face, tabular figures
+   and their own scroll box: a wide table scrolls inside the article instead of
+   pushing the whole page sideways on a phone. The wrapper is added at render
+   time (see content/render.ts). */
+.prose-body .table-scroll {
+  margin: 1.8em 0;
+  overflow-x: auto;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  background: hsl(var(--card));
+}
+.prose-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  font-variant-numeric: tabular-nums;
+}
+.prose-body th {
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid hsl(var(--border));
+  background: hsl(var(--muted));
+  font-family: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+  white-space: nowrap;
+}
+.prose-body td {
+  padding: 0.55rem 0.85rem;
+  border-bottom: 1px solid hsl(var(--border));
+  vertical-align: top;
+}
+.prose-body tr:last-child td {
+  border-bottom: 0;
+}
+.prose-body td code {
+  font-size: 0.8em;
 }
 
 /* The prompt caret in the wordmark: the cursor is still sitting after the domain

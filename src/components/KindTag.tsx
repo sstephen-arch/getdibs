@@ -9,7 +9,7 @@ export const KIND_LABELS: Record<Kind, string> = {
 
 export function KindTag({ kind }: { kind: Kind }) {
   return (
-    <span className="record text-[0.6875rem] uppercase tracking-[0.13em] text-muted-foreground">
+    <span className="record inline-flex items-center rounded-full border border-border bg-muted px-2 py-0.5 text-[0.625rem] font-medium uppercase leading-4 tracking-[0.12em] text-muted-foreground">
       {KIND_LABELS[kind]}
     </span>
   );

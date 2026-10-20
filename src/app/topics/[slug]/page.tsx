@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { IndexList } from "@/components/IndexList";
-import { StockShell } from "@/components/StockShell";
+import { ProjectCard } from "@/components/ProjectCard";
+import { SectionHeader } from "@/components/SectionHeader";
+import { SiteShell } from "@/components/SiteShell";
 import { topicsInUse } from "@/content/frontpage";
 import { loadContent } from "@/content/load";
-import { projectPath, topicPath } from "@/content/routes";
+import { topicPath } from "@/content/routes";
 import { TOPICS } from "@/content/schema";
 import { SITE } from "@/lib/site";
 
@@ -43,8 +45,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const taggedProjects = projects.filter((project) => project.topics?.includes(slug));
 
   return (
-    <StockShell stock="wire">
+    <SiteShell section="topics">
       <IndexList
+        path={`~/topics/${topic.slug}`}
         title={topic.name}
         intro={topic.description}
         items={tagged}
@@ -52,17 +55,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         now={new Date()}
       />
       {taggedProjects.length > 0 && (
-        <section className="mx-auto max-w-6xl border-t border-border px-5 py-8">
-          <h2 className="m-0 mb-4 font-display text-xl font-semibold">Projects</h2>
-          <ul className="m-0 flex list-none flex-col gap-3 p-0">
+        <section className="mx-auto max-w-6xl px-5 pb-8">
+          <SectionHeader label="Projects" href="/projects/" />
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {taggedProjects.map((project) => (
-              <li key={project.slug}>
-                <a href={projectPath(project)} className="no-underline hover:underline">{project.title}</a>
-              </li>
+              <ProjectCard key={project.slug} project={project} />
             ))}
-          </ul>
+          </div>
         </section>
       )}
-    </StockShell>
+    </SiteShell>
   );
 }

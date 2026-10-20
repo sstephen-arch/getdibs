@@ -3,32 +3,44 @@ import { SITE } from "@/lib/site";
 import { Wordmark } from "./Wordmark";
 
 const NAV = [
-  { href: "/essays/", label: "Essays" },
-  { href: "/notes/", label: "Notes" },
-  { href: "/watch/", label: "Watch" },
-  { href: "/projects/", label: "Projects" },
-  { href: "/topics/", label: "Topics" },
+  { href: "/essays/", label: "Essays", section: "essays" },
+  { href: "/notes/", label: "Notes", section: "notes" },
+  { href: "/watch/", label: "Watch", section: "watch" },
+  { href: "/projects/", label: "Projects", section: "projects" },
+  { href: "/topics/", label: "Topics", section: "topics" },
 ] as const;
 
-export function Masthead() {
+export type Section = (typeof NAV)[number]["section"];
+
+/** White, sticky and ruled off from the page, as on Depalo, so the paper below
+ *  reads as the page and the bar reads as furniture. */
+export function Masthead({ section }: { section?: Section }) {
   return (
-    <header className="border-b border-border">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-baseline gap-x-6 gap-y-2 px-5 py-4">
+    <header className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/85">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-5 py-3">
         {/* The wordmark is the domain: `get dibs.io` types itself as a command, so
             there is no separate DIBS lockup sitting next to it. */}
         <Link href="/" className="no-underline" aria-label={`${SITE.name}, home`}>
           <Wordmark />
         </Link>
-        <nav aria-label="Sections" className="ml-auto flex flex-wrap gap-x-5 gap-y-1">
-          {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="font-ui text-sm text-muted-foreground no-underline hover:text-foreground"
-            >
-              {item.label}
-            </Link>
-          ))}
+        <nav aria-label="Sections" className="-mx-2 flex w-full flex-wrap gap-1 sm:mx-0 sm:ml-auto sm:w-auto">
+          {NAV.map((item) => {
+            const current = item.section === section;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={current ? "true" : undefined}
+                className={`rounded-control px-2.5 py-1.5 font-ui text-sm font-medium no-underline transition-colors ${
+                  current
+                    ? "bg-muted text-foreground"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
       </div>
     </header>

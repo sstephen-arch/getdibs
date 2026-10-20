@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Article } from "@/components/Article";
-import { StockShell } from "@/components/StockShell";
+import { SiteShell } from "@/components/SiteShell";
 import { loadEntries } from "@/content/load";
 import { renderMarkdown } from "@/content/render";
 import { placeholderSlug } from "@/content/routes";
@@ -35,8 +35,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   if (!entry) notFound();
 
   return (
-    <StockShell stock="reading">
+    <SiteShell section="essays">
       <Article entry={entry} html={await renderMarkdown(entry.body)} now={new Date()} />
-    </StockShell>
+    </SiteShell>
   );
 }

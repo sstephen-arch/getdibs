@@ -8,18 +8,36 @@ import { entry } from "../helpers/fixtures";
 const NOW = new Date("2026-10-19T12:00:00Z");
 
 describe("Plate", () => {
-  it("renders a typographic plate when there is no cover", () => {
+  it("opens the item's own source file at its frontmatter", () => {
     const { container } = render(
-      <Plate entry={entry({ slug: "x", title: "On-device inference", topics: ["local-ai"] })} />,
+      <Plate
+        entry={entry({
+          slug: "x",
+          kind: "essay",
+          date: "2026-10-19",
+          title: "On-device inference",
+          topics: ["local-ai"],
+          file: "content/entries/2026-10-19-x.md",
+        })}
+      />,
     );
-    expect(screen.getByText("On-device inference")).toBeTruthy();
+    const plate = container.querySelector("[data-plate]");
+    expect(plate).toBeTruthy();
     expect(container.querySelector("img")).toBeNull();
-    expect(container.querySelector("[data-plate]")).toBeTruthy();
+    expect(plate?.textContent).toContain("content/entries/2026-10-19-x.md");
+    expect(plate?.textContent).toContain("kind: essay");
+    expect(plate?.textContent).toContain("date: 2026-10-19");
+    expect(plate?.textContent).toContain("topics: [local-ai]");
   });
 
-  it("labels the kind", () => {
-    render(<Plate entry={entry({ kind: "video", title: "A talk" })} />);
-    expect(screen.getByText(/Video/)).toBeTruthy();
+  it("states the reading time as a comment, since it is derived rather than written", () => {
+    const { container } = render(<Plate entry={entry({ kind: "video", title: "A talk", body: "word ".repeat(460) })} />);
+    expect(container.textContent).toContain("# 2 min read");
+  });
+
+  it("does not repeat the headline it sits next to", () => {
+    const { container } = render(<Plate entry={entry({ title: "On-device inference" })} />);
+    expect(container.textContent).not.toContain("On-device inference");
   });
 });
 
@@ -46,10 +64,19 @@ describe("Card", () => {
     expect(container.querySelector("img")?.getAttribute("src")).toBe("/c.webp");
   });
 
-  it("falls back to the plate when there is no cover", () => {
-    const { container } = render(<Card entry={entry({ slug: "y", title: "Uncovered" })} now={NOW} />);
+  it("renders text only when there is no cover, never an empty media box", () => {
+    const { container } = render(<Card entry={entry({ slug: "y", title: "Uncovered", summary: "What it says." })} now={NOW} />);
     expect(container.querySelector("img")).toBeNull();
-    expect(container.querySelector("[data-plate]")).toBeTruthy();
+    expect(container.querySelector("[data-plate]")).toBeNull();
+    expect(screen.getByText("What it says.")).toBeTruthy();
+  });
+
+  it("lists topics as plain text, so the title stays the card's only link", () => {
+    const { container } = render(
+      <Card entry={entry({ slug: "t", title: "Tagged", topics: ["local-ai"] })} now={NOW} />,
+    );
+    expect(container.textContent).toContain("#local-ai");
+    expect(container.querySelectorAll("a")).toHaveLength(1);
   });
 
   it("links to the item and shows a relative timestamp inside 48 hours", () => {

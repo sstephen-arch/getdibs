@@ -34,10 +34,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    /* Most routes are index routes, so the wire is the site default. `StockShell`
-       re-declares the stock per page; tokens resolve from the nearest ancestor. */
     <html lang="en" className={`${serif.variable} ${ui.variable} ${mono.variable}`}>
-      <body data-stock="wire">
+      <body>
         {children}
         <Analytics />
       </body>

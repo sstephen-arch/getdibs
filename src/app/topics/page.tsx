@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { StockShell } from "@/components/StockShell";
+import { IndexHeader } from "@/components/IndexList";
+import { SiteShell } from "@/components/SiteShell";
 import { topicsInUse } from "@/content/frontpage";
 import { loadContent } from "@/content/load";
 import { topicPath } from "@/content/routes";
@@ -11,24 +12,33 @@ export default function Page() {
   const topics = topicsInUse(entries, projects);
 
   return (
-    <StockShell stock="wire">
-      <section className="mx-auto max-w-6xl px-5 py-10">
-        <h1 className="m-0 font-display text-[clamp(2rem,4vw,3rem)] font-semibold tracking-tight">Topics</h1>
+    <SiteShell section="topics">
+      <section className="mx-auto max-w-6xl px-5 py-12">
+        <IndexHeader path="~/topics" title="Topics" intro="The desks this site files under." />
         {topics.length === 0 ? (
           <p className="mt-8 font-display text-muted-foreground">No topics in use yet.</p>
         ) : (
-          <ul className="mt-8 flex list-none flex-col gap-6 border-t border-border p-0 pt-8">
+          <ul className="mt-8 grid list-none gap-5 p-0 sm:grid-cols-2 lg:grid-cols-3">
             {topics.map((topic) => (
-              <li key={topic.slug}>
+              <li
+                key={topic.slug}
+                className="group relative flex flex-col gap-2 rounded-lg border border-border bg-card p-5 shadow-sm transition-colors hover:border-primary/50"
+              >
+                <p className="record m-0 text-[0.6875rem] text-muted-foreground">#{topic.slug}</p>
                 <h2 className="m-0 font-display text-2xl font-semibold">
-                  <Link href={topicPath(topic.slug)} className="no-underline hover:underline">{topic.name}</Link>
+                  <Link
+                    href={topicPath(topic.slug)}
+                    className="no-underline after:absolute after:inset-0 after:content-[''] group-hover:text-primary"
+                  >
+                    {topic.name}
+                  </Link>
                 </h2>
-                <p className="measure m-0 mt-1 text-muted-foreground">{topic.description}</p>
+                <p className="m-0 text-sm leading-relaxed text-muted-foreground">{topic.description}</p>
               </li>
             ))}
           </ul>
         )}
       </section>
-    </StockShell>
+    </SiteShell>
   );
 }

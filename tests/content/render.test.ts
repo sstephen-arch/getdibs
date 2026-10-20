@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { renderMarkdown } from "@/content/render";
+import { headingsOf, renderMarkdown } from "@/content/render";
 
 describe("renderMarkdown", () => {
   it("renders paragraphs", async () => {
@@ -10,6 +10,12 @@ describe("renderMarkdown", () => {
     const html = await renderMarkdown("| a | b |\n| - | - |\n| 1 | 2 |");
     expect(html).toContain("<table>");
     expect(html).toContain("<td>1</td>");
+  });
+
+  it("wraps tables in a scroll box so a wide one cannot push the page sideways", async () => {
+    const html = await renderMarkdown("| a | b |\n| - | - |\n| 1 | 2 |");
+    expect(html).toMatch(/^<div class="table-scroll"><table>/);
+    expect(html).toMatch(/<\/table><\/div>$/);
   });
 
   it("gives headings stable ids", async () => {
@@ -52,5 +58,19 @@ describe("renderMarkdown", () => {
     expect(html).not.toContain("<6");
     expect(html).toMatch(/&(lt|#x3C);/);
     expect(html).toMatch(/&(amp|#x26);/);
+  });
+});
+
+describe("headingsOf", () => {
+  it("lists second-level headings with the ids rehype-slug wrote", async () => {
+    const html = await renderMarkdown("## One\n\ntext\n\n### Skipped\n\n## Two `code` & more");
+    expect(headingsOf(html)).toEqual([
+      { id: "one", text: "One" },
+      { id: "two-code--more", text: "Two code & more" },
+    ]);
+  });
+
+  it("returns nothing for a body without headings", () => {
+    expect(headingsOf("<p>Just text.</p>")).toEqual([]);
   });
 });
