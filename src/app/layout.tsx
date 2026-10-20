@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Source_Serif_4, Inter, JetBrains_Mono } from "next/font/google";
+import { Analytics } from "@/components/Analytics";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
@@ -36,7 +37,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     /* Most routes are index routes, so the wire is the site default. `StockShell`
        re-declares the stock per page; tokens resolve from the nearest ancestor. */
     <html lang="en" className={`${serif.variable} ${ui.variable} ${mono.variable}`}>
-      <body data-stock="wire">{children}</body>
+      <body data-stock="wire">
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }

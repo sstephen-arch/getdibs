@@ -5,6 +5,7 @@ import { StockShell } from "@/components/StockShell";
 import { loadEntries } from "@/content/load";
 import { renderMarkdown } from "@/content/render";
 import { placeholderSlug } from "@/content/routes";
+import { itemMetadata } from "@/lib/og";
 
 export const dynamicParams = false;
 
@@ -20,7 +21,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const entry = findVideo(slug);
-  return entry ? { title: entry.title, description: entry.summary } : {};
+  return entry ? itemMetadata(entry) : {};
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {

@@ -5,6 +5,7 @@ import { Prose } from "@/components/Prose";
 import { loadContent } from "@/content/load";
 import { renderMarkdown } from "@/content/render";
 import { entryPath, placeholderSlug } from "@/content/routes";
+import { projectMetadata } from "@/lib/og";
 
 export const dynamicParams = false;
 
@@ -20,7 +21,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const project = findProject(slug);
-  return project ? { title: project.title, description: project.summary } : {};
+  return project ? projectMetadata(project) : {};
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {

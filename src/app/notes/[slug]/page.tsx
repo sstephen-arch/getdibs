@@ -5,6 +5,7 @@ import { StockShell } from "@/components/StockShell";
 import { loadEntries, type Entry } from "@/content/load";
 import { renderMarkdown } from "@/content/render";
 import { placeholderSlug } from "@/content/routes";
+import { itemMetadata } from "@/lib/og";
 
 const KINDS = ["note", "link"] as const;
 
@@ -28,7 +29,7 @@ function findNote(slug: string) {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const entry = findNote(slug);
-  return entry ? { title: entry.title, description: entry.summary } : {};
+  return entry ? itemMetadata(entry) : {};
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {

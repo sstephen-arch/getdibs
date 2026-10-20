@@ -5,6 +5,7 @@ import { StockShell } from "@/components/StockShell";
 import { loadEntries } from "@/content/load";
 import { renderMarkdown } from "@/content/render";
 import { placeholderSlug } from "@/content/routes";
+import { itemMetadata } from "@/lib/og";
 
 /* Static export has no runtime: only the slugs `generateStaticParams` lists are
    emitted, and anything else 404s. `dynamicParams = false` states that. */
@@ -25,7 +26,7 @@ function findEssay(slug: string) {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const entry = findEssay(slug);
-  return entry ? { title: entry.title, description: entry.summary } : {};
+  return entry ? itemMetadata(entry) : {};
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
