@@ -22,13 +22,12 @@ export default function Page() {
             {topics.map((topic) => (
               <li
                 key={topic.slug}
-                className="group relative flex flex-col gap-2 rounded-lg border border-border bg-card p-5 shadow-sm transition-colors hover:border-primary/50"
+                className="group relative flex flex-col gap-2 rounded-lg border border-border bg-card p-5 shadow-sm transition-shadow duration-300 hover:shadow-md"
               >
-                <p className="record m-0 text-[0.6875rem] text-muted-foreground">#{topic.slug}</p>
                 <h2 className="m-0 font-display text-2xl font-semibold">
                   <Link
                     href={topicPath(topic.slug)}
-                    className="no-underline after:absolute after:inset-0 after:content-[''] group-hover:text-primary"
+                    className="no-underline after:absolute after:inset-0 after:content-['']"
                   >
                     {topic.name}
                   </Link>

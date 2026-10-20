@@ -54,6 +54,14 @@ function absoluteHttpUrl(file: string, value: string, field: string): string {
   return value;
 }
 
+/** A cover is either a file this site serves (root-relative, checked against
+ *  public/ when content loads) or an absolute http(s) URL. */
+function optionalCover(file: string, data: Record<string, unknown>): string | undefined {
+  const value = optionalString(file, data, "cover");
+  if (value === undefined || value.startsWith("/")) return value;
+  return absoluteHttpUrl(file, value, "cover");
+}
+
 function optionalDate(file: string, data: Record<string, unknown>, field: string): string | undefined {
   const value = optionalString(file, data, field);
   if (value === undefined) return undefined;
@@ -120,7 +128,9 @@ export function validateEntry(file: string, input: unknown): EntryFrontmatter {
     summary,
     topics: optionalTopics(file, input),
     author: optionalString(file, input, "author"),
-    cover: optionalString(file, input, "cover"),
+    cover: optionalCover(file, input),
+    cover_alt: optionalString(file, input, "cover_alt"),
+    cover_credit: optionalString(file, input, "cover_credit"),
     lead: optionalBoolean(file, input, "lead"),
     draft: optionalBoolean(file, input, "draft"),
     updated: optionalDate(file, input, "updated"),

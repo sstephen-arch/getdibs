@@ -24,6 +24,18 @@ describe("validateEntry", () => {
     expect(note.title).toBeUndefined();
   });
 
+  it("accepts a root-relative cover or an absolute http(s) one, with alt text and a credit", () => {
+    const local = validateEntry("e.md", { ...base, cover: "/covers/x.webp", cover_alt: "A chip.", cover_credit: "By me." });
+    expect(local.cover).toBe("/covers/x.webp");
+    expect(local.cover_alt).toBe("A chip.");
+    expect(local.cover_credit).toBe("By me.");
+    expect(validateEntry("e.md", { ...base, cover: "https://x.test/c.jpg" }).cover).toBe("https://x.test/c.jpg");
+  });
+
+  it("rejects a cover that is neither root-relative nor an http(s) URL", () => {
+    expect(() => validateEntry("e.md", { ...base, cover: "covers/x.webp" })).toThrow(/"cover" must be an absolute http or https URL/);
+  });
+
   it("requires url and source on a link", () => {
     expect(() => validateEntry("l.md", { ...base, kind: "link", source: "The Verge" }))
       .toThrow(/kind "link" requires "url"/);

@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import matter from "gray-matter";
 import {
@@ -115,7 +115,10 @@ export function loadProjects(dir = "content/projects"): Project[] {
   );
 }
 
-export function loadContent(root = "content"): { entries: Entry[]; projects: Project[] } {
+export function loadContent(
+  root = "content",
+  publicDir = "public",
+): { entries: Entry[]; projects: Project[] } {
   const entries = loadEntries(join(root, "entries"));
   const projects = loadProjects(join(root, "projects"));
   const known = new Set(projects.map((p) => p.slug));
@@ -123,6 +126,11 @@ export function loadContent(root = "content"): { entries: Entry[]; projects: Pro
   for (const entry of entries) {
     if (entry.project && !known.has(entry.project)) {
       throw new ContentError(`${entry.file}: project "${entry.project}" does not exist`);
+    }
+    /* A cover the site serves itself must exist, or every card for this item
+       ships a broken image. */
+    if (entry.cover?.startsWith("/") && !existsSync(join(publicDir, entry.cover))) {
+      throw new ContentError(`${entry.file}: cover "${entry.cover}" is not in ${publicDir}/`);
     }
   }
 

@@ -42,7 +42,12 @@ export interface EntryFrontmatter {
   summary: string;
   topics?: string[];
   author?: string;
+  /** Root-relative path under public/ (e.g. "/covers/x.webp") or an absolute URL. */
   cover?: string;
+  /** What the cover shows, for the article page where it is not decoration. */
+  cover_alt?: string;
+  /** Who made the cover and under what licence, printed under it. */
+  cover_credit?: string;
   lead?: boolean;
   draft?: boolean;
   updated?: string;
