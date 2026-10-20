@@ -26,6 +26,38 @@ function hostnameOf(url: string): string | null {
   }
 }
 
+const STAT_COLUMNS: Record<number, string> = {
+  1: "grid-cols-1",
+  2: "grid-cols-2",
+  3: "grid-cols-3",
+  4: "grid-cols-2 lg:grid-cols-4",
+};
+
+/** The figures a reader should know before trusting the piece, printed large
+ *  under the standfirst. A description list, so each number keeps its label
+ *  for assistive tech; CSS order puts the number on top. */
+function Stats({ stats }: { stats: NonNullable<Entry["stats"]> }) {
+  return (
+    <section aria-label="By the numbers" className="mb-10">
+      <dl
+        /* The 1px gap over a border-coloured ground draws the hairlines, so the
+           dividers stay right however the grid wraps. */
+        className={`m-0 grid gap-px overflow-hidden rounded-lg border border-border bg-border shadow-sm ${STAT_COLUMNS[stats.length]}`}
+      >
+        {stats.map((stat) => (
+          <div key={stat.label} className="flex flex-col gap-1 bg-card px-3 py-4 sm:px-5">
+            <dt className="order-2 font-ui text-xs font-medium text-foreground sm:text-sm">{stat.label}</dt>
+            <dd className="order-1 m-0 font-display text-[1.5rem] font-semibold leading-none tracking-tight sm:text-[2rem]">
+              {stat.value}
+            </dd>
+            {stat.detail && <dd className="order-3 m-0 font-ui text-xs leading-snug text-muted-foreground">{stat.detail}</dd>}
+          </div>
+        ))}
+      </dl>
+    </section>
+  );
+}
+
 /** A table of contents earns its column only when there is something to jump
  *  between. */
 const MIN_HEADINGS = 3;
@@ -79,6 +111,8 @@ export function Article({ entry, html, now }: { entry: Entry; html: string; now:
             {entry.summary}
           </p>
         )}
+
+        {entry.stats && <Stats stats={entry.stats} />}
 
         {/* A link item names its source up front as plain text; the way out is a
             citation box at the end, so the page reads as commentary rather than

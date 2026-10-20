@@ -36,6 +36,24 @@ describe("validateEntry", () => {
     expect(() => validateEntry("e.md", { ...base, cover: "covers/x.webp" })).toThrow(/"cover" must be an absolute http or https URL/);
   });
 
+  it("accepts up to four stats, keeping a bare YAML number as text", () => {
+    const stats = validateEntry("e.md", {
+      ...base,
+      stats: [{ value: 12, label: "models tested" }, { value: "6 weeks", label: "of testing", detail: "Sep to Oct" }],
+    }).stats;
+    expect(stats).toEqual([
+      { value: "12", label: "models tested" },
+      { value: "6 weeks", label: "of testing", detail: "Sep to Oct" },
+    ]);
+  });
+
+  it("rejects stats that are empty, too many, or missing a label", () => {
+    expect(() => validateEntry("e.md", { ...base, stats: [] })).toThrow(/"stats" must be a list of 1 to 4 items/);
+    const five = Array.from({ length: 5 }, () => ({ value: "1", label: "x" }));
+    expect(() => validateEntry("e.md", { ...base, stats: five })).toThrow(/1 to 4 items/);
+    expect(() => validateEntry("e.md", { ...base, stats: [{ value: "1" }] })).toThrow(/stats\[0\] needs both value and label/);
+  });
+
   it("requires url and source on a link", () => {
     expect(() => validateEntry("l.md", { ...base, kind: "link", source: "The Verge" }))
       .toThrow(/kind "link" requires "url"/);

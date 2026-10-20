@@ -35,6 +35,14 @@ export const TOPICS: Topic[] = [
   },
 ];
 
+/** One figure in an item's "by the numbers" strip. `value` is printed large,
+ *  `label` under it, and `detail` (optional) says where the number comes from. */
+export interface EntryStat {
+  value: string;
+  label: string;
+  detail?: string;
+}
+
 export interface EntryFrontmatter {
   kind: Kind;
   date?: string;
@@ -48,6 +56,8 @@ export interface EntryFrontmatter {
   cover_alt?: string;
   /** Who made the cover and under what licence, printed under it. */
   cover_credit?: string;
+  /** Up to four figures shown under the standfirst, for the credibility of a piece. */
+  stats?: EntryStat[];
   lead?: boolean;
   draft?: boolean;
   updated?: string;
