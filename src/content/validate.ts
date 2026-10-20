@@ -170,5 +170,6 @@ export function validateProject(file: string, input: unknown): ProjectFrontmatte
     links,
     topics: optionalTopics(file, input),
     cover: optionalString(file, input, "cover"),
+    featured: optionalBoolean(file, input, "featured"),
   };
 }

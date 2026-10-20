@@ -105,7 +105,14 @@ export function loadProjects(dir = "content/projects"): Project[] {
 
   assertUniqueSlugs(projects, "project");
 
-  return projects.sort((a, b) => b.year.localeCompare(a.year) || a.slug.localeCompare(b.slug));
+  /* Featured first, so the repositories a reader can actually open are the ones
+     they meet first; then newest year, then slug. */
+  return projects.sort(
+    (a, b) =>
+      Number(b.featured ?? false) - Number(a.featured ?? false) ||
+      b.year.localeCompare(a.year) ||
+      a.slug.localeCompare(b.slug),
+  );
 }
 
 export function loadContent(root = "content"): { entries: Entry[]; projects: Project[] } {

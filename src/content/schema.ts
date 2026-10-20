@@ -67,4 +67,9 @@ export interface ProjectFrontmatter {
   links?: ProjectLink[];
   topics?: string[];
   cover?: string;
+  /** Pins a project above the rest of the index. Used for the repositories that
+   *  are public and open source, so the ones a reader can actually go and read
+   *  are the ones they meet first. Ordering inside each group is still newest
+   *  year, then slug. */
+  featured?: boolean;
 }

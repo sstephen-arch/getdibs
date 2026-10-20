@@ -179,4 +179,24 @@ describe("loadContent", () => {
     write("projects/MANIFEST.md", "---\ntitle: B\nsummary: s\nstatus: shipped\nyear: \"2026\"\n---\n\nx\n");
     expect(() => loadProjects(join(root, "projects"))).toThrow(/duplicate project slug "manifest"/);
   });
+
+  it("pins featured projects above the rest, then sorts by year and slug", () => {
+    const project = (name: string, extra: string) =>
+      write(`projects/${name}.md`, `---\ntitle: ${name}\nsummary: s\nstatus: shipped\nyear: "2026"\n${extra}---\n\nx\n`);
+
+    project("zulu", "featured: true\n");
+    project("alpha", "");
+    project("bravo", "featured: true\n");
+
+    expect(loadProjects(join(root, "projects")).map((p) => p.slug)).toEqual([
+      "bravo",
+      "zulu",
+      "alpha",
+    ]);
+  });
+
+  it("rejects a non-boolean featured flag", () => {
+    write("projects/manifest.md", "---\ntitle: A\nsummary: s\nstatus: shipped\nyear: \"2026\"\nfeatured: yes\n---\n\nx\n");
+    expect(() => loadProjects(join(root, "projects"))).toThrow(/featured must be true or false/);
+  });
 });
