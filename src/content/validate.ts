@@ -3,6 +3,7 @@ import {
   PROJECT_STATUSES,
   TOPICS,
   type EntryFrontmatter,
+  type EntryStat,
   type Kind,
   type ProjectFrontmatter,
   type ProjectLink,
@@ -90,6 +91,33 @@ function optionalTopics(file: string, data: Record<string, unknown>): string[] |
   return value as string[];
 }
 
+const MAX_STATS = 4;
+
+/** A stat's value may be written bare in YAML (`value: 12`), so a number is
+ *  accepted and kept as text; anything else must be a non-empty string. */
+function statText(value: unknown): string | undefined {
+  if (typeof value === "number" && Number.isFinite(value)) return String(value);
+  if (typeof value === "string" && value.trim() !== "") return value;
+  return undefined;
+}
+
+function optionalStats(file: string, data: Record<string, unknown>): EntryStat[] | undefined {
+  const value = data.stats;
+  if (value === undefined) return undefined;
+  if (!Array.isArray(value) || value.length === 0 || value.length > MAX_STATS) {
+    fail(file, `"stats" must be a list of 1 to ${MAX_STATS} items`);
+  }
+  return value.map((item, index) => {
+    const stat = isRecord(item) ? { value: statText(item.value), label: statText(item.label) } : undefined;
+    if (!stat?.value || !stat.label) fail(file, `stats[${index}] needs both value and label`);
+    const detail = (item as Record<string, unknown>).detail;
+    if (detail !== undefined && statText(detail) === undefined) {
+      fail(file, `stats[${index}].detail must be a non-empty string`);
+    }
+    return { value: stat.value, label: stat.label, ...(detail !== undefined ? { detail: String(detail) } : {}) };
+  });
+}
+
 export function validateEntry(file: string, input: unknown): EntryFrontmatter {
   if (!isRecord(input)) fail(file, "frontmatter is missing");
 
@@ -131,6 +159,7 @@ export function validateEntry(file: string, input: unknown): EntryFrontmatter {
     cover: optionalCover(file, input),
     cover_alt: optionalString(file, input, "cover_alt"),
     cover_credit: optionalString(file, input, "cover_credit"),
+    stats: optionalStats(file, input),
     lead: optionalBoolean(file, input, "lead"),
     draft: optionalBoolean(file, input, "draft"),
     updated: optionalDate(file, input, "updated"),

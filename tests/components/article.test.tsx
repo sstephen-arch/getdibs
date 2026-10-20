@@ -119,6 +119,39 @@ describe("Article", () => {
   });
 });
 
+describe("Article stats", () => {
+  it("prints each figure with its label, number first", () => {
+    const { container } = render(
+      <Article
+        entry={entry({
+          kind: "essay",
+          title: "Tested",
+          slug: "stats",
+          stats: [
+            { value: "12", label: "models tested" },
+            { value: "2", label: "computers", detail: "a MacBook and a Mac Studio" },
+          ],
+        })}
+        html=""
+        now={NOW}
+      />,
+    );
+    const items = [...container.querySelectorAll("dl > div")];
+    expect(items).toHaveLength(2);
+    expect(items[0].querySelector("dt")?.textContent).toBe("models tested");
+    expect(items[0].querySelector("dd")?.textContent).toBe("12");
+    expect(items[1].textContent).toContain("a MacBook and a Mac Studio");
+    expect(screen.getByRole("region", { name: "By the numbers" })).toBeTruthy();
+  });
+
+  it("renders no strip when an item has no stats", () => {
+    const { container } = render(
+      <Article entry={entry({ kind: "essay", title: "Plain", slug: "nostats" })} html="" now={NOW} />,
+    );
+    expect(container.querySelector("dl")).toBeNull();
+  });
+});
+
 describe("VideoEmbed", () => {
   it("always offers a text link to the source", () => {
     render(<VideoEmbed id="abc123" title="A talk" channel="Some Channel" url="https://youtube.com/watch?v=abc123" />);
