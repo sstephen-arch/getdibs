@@ -1,10 +1,12 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { IndexList } from "@/components/IndexList";
 import { StockShell } from "@/components/StockShell";
 import { topicsInUse } from "@/content/frontpage";
 import { loadContent } from "@/content/load";
-import { projectPath } from "@/content/routes";
+import { projectPath, topicPath } from "@/content/routes";
 import { TOPICS } from "@/content/schema";
+import { SITE } from "@/lib/site";
 
 /* Static export has no runtime, so a topic that is defined but never used must
    emit no page at all. `dynamicParams = false` states that explicitly: only the
@@ -14,6 +16,17 @@ export const dynamicParams = false;
 export function generateStaticParams() {
   const { entries, projects } = loadContent();
   return topicsInUse(entries, projects).map((topic) => ({ slug: topic.slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const topic = TOPICS.find((item) => item.slug === slug);
+  if (!topic) return {};
+  return {
+    title: topic.name,
+    description: topic.description,
+    alternates: { canonical: `${SITE.url}${topicPath(topic.slug)}` },
+  };
 }
 
 /* `params` is a Promise in the App Router this project targets — verified in

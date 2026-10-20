@@ -1,0 +1,18 @@
+{
+  // The static export is served straight from `out/`, the same directory
+  // `next build` writes. `wrangler deploy` uploads it as Workers Static Assets
+  // and, because the zone is in this account, Cloudflare creates the DNS record
+  // for the custom domain itself — which is why this route exists rather than a
+  // hand-added CNAME.
+  "name": "getdibs",
+  "compatibility_date": "2026-10-19",
+  "assets": {
+    "directory": "./out",
+    // Next exports `<route>/index.html` under `trailingSlash: true`; this serves
+    // both `/essays/` and `/essays` from it.
+    "html_handling": "auto-trailing-slash",
+    // `out/404.html` is the not-found page the app already renders.
+    "not_found_handling": "404-page"
+  },
+  "routes": [{ "pattern": "getdibs.io", "custom_domain": true }]
+}
