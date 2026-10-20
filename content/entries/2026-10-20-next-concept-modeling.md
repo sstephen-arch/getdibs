@@ -5,6 +5,9 @@ summary: "A Stanford lab's alternative to writing one token at a time: encode te
 url: "https://hazyresearch.stanford.edu/blog/2026-10-12-ncm"
 source: "Hazy Research"
 topics: []
+cover: "/covers/next-concept-modeling.webp"
+cover_alt: "Four rows of blocks on a cobalt background, from one wide block at level zero down to dozens of narrow blocks at level three, illustrating coarse-to-fine generation."
+cover_credit: "Cover: illustration by the author."
 ---
 
 Most text generation happens one token at a time. Diffusion language models are

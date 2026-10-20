@@ -5,7 +5,7 @@ import { SECTION_OF_KIND, topicPath } from "@/content/routes";
 import { TOPICS } from "@/content/schema";
 import { formatWhen, readingMinutes } from "@/lib/format";
 import { SITE } from "@/lib/site";
-import { KindTag } from "./KindTag";
+import { Kicker } from "./KindTag";
 import { Prose } from "./Prose";
 import { VideoEmbed } from "./VideoEmbed";
 
@@ -43,22 +43,20 @@ export function Article({ entry, html, now }: { entry: Entry; html: string; now:
       className={`mx-auto grid max-w-6xl gap-12 px-5 py-10 ${hasToc ? "lg:grid-cols-[minmax(0,1fr)_15rem]" : ""}`}
     >
       <article className={`min-w-0 ${hasToc ? "" : "mx-auto w-full max-w-3xl"}`}>
-        <nav aria-label="Breadcrumb" className="record mb-6 text-[0.75rem] text-muted-foreground">
-          <Link href="/" className="no-underline hover:text-primary">~</Link>
-          {" / "}
-          <Link href={`/${section}/`} className="no-underline hover:text-primary">{section}</Link>
-          {" / "}
-          <span className="text-foreground">{entry.slug}</span>
+        <nav aria-label="Breadcrumb" className="mb-6 font-ui text-sm text-muted-foreground">
+          <Link href="/" className="no-underline hover:text-foreground">Home</Link>
+          <span aria-hidden className="mx-2">/</span>
+          <Link href={`/${section}/`} className="capitalize no-underline hover:text-foreground">{section}</Link>
         </nav>
 
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <KindTag kind={entry.kind} />
-          <time className="record text-[0.6875rem] text-muted-foreground" dateTime={entry.date}>
+          <Kicker entry={entry} />
+          <time className="font-ui text-xs text-muted-foreground" dateTime={entry.date}>
             {formatWhen(`${entry.date}T12:00:00Z`, now)}
           </time>
-          <span className="record text-[0.6875rem] text-muted-foreground">· {readingMinutes(entry.body)} min read</span>
+          <span className="font-ui text-xs text-muted-foreground">· {readingMinutes(entry.body)} min read</span>
           {entry.updated && (
-            <span className="record text-[0.6875rem] text-muted-foreground">
+            <span className="font-ui text-xs text-muted-foreground">
               · Updated {formatWhen(`${entry.updated}T12:00:00Z`, now)}
             </span>
           )}
@@ -82,23 +80,28 @@ export function Article({ entry, html, now }: { entry: Entry; html: string; now:
           </p>
         )}
 
-        {/* For a link, the point of the page is the piece it points at, so the way
-            out is a labelled control rather than a bare underlined hostname. The
-            hostname stays visible next to it: the name says which publication, the
-            hostname says which site, and they are not always the same thing. */}
-        {entry.kind === "link" && entry.url && (
-          <p className="m-0 mb-8 flex flex-wrap items-center gap-x-3 gap-y-2 font-ui text-sm">
-            <a
-              href={entry.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-control bg-primary px-4 py-2 font-medium text-primary-foreground no-underline hover:bg-primary/90"
-            >
-              Read the original{entry.source ? ` at ${entry.source}` : ""}
-              <span aria-hidden>↗</span>
-            </a>
-            {linkHost && <span className="record text-muted-foreground">{linkHost}</span>}
+        {/* A link item names its source up front as plain text; the way out is a
+            citation box at the end, so the page reads as commentary rather than
+            a button pushing the reader somewhere else. */}
+        {entry.kind === "link" && entry.source && (
+          <p className="m-0 mb-8 font-ui text-sm text-muted-foreground">
+            On a piece from <span className="font-medium text-foreground">{entry.source}</span>
           </p>
+        )}
+
+        {entry.cover && !videoId && (
+          <figure className="m-0 mb-10">
+            <img
+              src={entry.cover}
+              alt={entry.cover_alt ?? ""}
+              width={1600}
+              height={1000}
+              className="aspect-[16/10] w-full rounded-lg border border-border object-cover"
+            />
+            {entry.cover_credit && (
+              <figcaption className="mt-2 font-ui text-xs text-muted-foreground">{entry.cover_credit}</figcaption>
+            )}
+          </figure>
         )}
 
         {videoId && (
@@ -114,6 +117,24 @@ export function Article({ entry, html, now }: { entry: Entry; html: string; now:
           <Prose html={html} />
         </div>
 
+        {entry.kind === "link" && entry.url && (
+          <aside className="measure mt-12 rounded-lg border border-border bg-card p-5 font-ui text-sm shadow-sm">
+            <p className="eyebrow m-0 mb-2">Source</p>
+            <p className="m-0 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <a
+                href={entry.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-foreground underline decoration-border underline-offset-4 hover:decoration-foreground"
+              >
+                Read the original{entry.source ? ` at ${entry.source}` : ""}
+                <span aria-hidden> ↗</span>
+              </a>
+              {linkHost && <span className="text-muted-foreground">{linkHost}</span>}
+            </p>
+          </aside>
+        )}
+
         <footer className="measure mt-14 flex flex-col gap-4 border-t border-border pt-6 font-ui text-sm">
           {topics.length > 0 && (
             <p className="m-0 flex flex-wrap items-center gap-2">
@@ -122,7 +143,7 @@ export function Article({ entry, html, now }: { entry: Entry; html: string; now:
                 <Link
                   key={topic.slug}
                   href={topicPath(topic.slug)}
-                  className="rounded-full border border-border bg-card px-3 py-1 no-underline hover:border-primary/50 hover:text-primary"
+                  className="rounded-full border border-border bg-card px-3 py-1 no-underline hover:border-foreground/30"
                 >
                   {topic.name}
                 </Link>
@@ -130,14 +151,11 @@ export function Article({ entry, html, now }: { entry: Entry; html: string; now:
             </p>
           )}
           <p className="m-0 flex flex-wrap justify-between gap-3 text-muted-foreground">
-            <Link href={`/${section}/`} className="no-underline hover:text-primary">
+            <Link href={`/${section}/`} className="no-underline hover:text-foreground">
               ← All {section}
             </Link>
-            <a
-              href={`${SITE.repo}/blob/main/${entry.file}`}
-              className="record text-[0.75rem] no-underline hover:text-primary"
-            >
-              view source: {entry.file} ↗
+            <a href={`${SITE.repo}/blob/main/${entry.file}`} className="no-underline hover:text-foreground">
+              View source on GitHub
             </a>
           </p>
         </footer>
@@ -153,7 +171,7 @@ export function Article({ entry, html, now }: { entry: Entry; html: string; now:
                   <span className="record shrink-0 text-[0.6875rem] leading-5 text-muted-foreground">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <a href={`#${heading.id}`} className="leading-5 text-muted-foreground no-underline hover:text-primary">
+                  <a href={`#${heading.id}`} className="leading-5 text-muted-foreground no-underline hover:text-foreground">
                     {heading.text}
                   </a>
                 </li>

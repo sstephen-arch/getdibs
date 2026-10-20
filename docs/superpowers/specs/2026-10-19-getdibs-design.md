@@ -177,6 +177,17 @@ What replaced the wire's job of making lists feel different from reading:
 
 No toggle and no dark mode: `prefers-color-scheme` does not flip the surface.
 
+**Cards are editorial, not links (amended 2026-10-20).** Every item shows as a
+picture, a kicker (its desk, or "Worth reading" for a pointer to someone else's
+work), the headline and the standfirst. Nothing in a card is styled as a
+hyperlink: no link colour, no arrows, no tags; the whole card is the target and
+the hover is a lift. Items carry a `cover` (with `cover_alt` and `cover_credit`);
+without one, the image slot is a topic-colour panel with no text. The front-page
+**rail is removed**: projects, watch and topics already have bands of their own,
+so a rail only repeated them as bare links (§6.1 item 4 is now the feed alone).
+A link item's way out is a "Source" box at the end of the page, not a button at
+the top.
+
 ### 7.2 Tokens — ported verbatim
 
 Token *names and values* are copied unchanged from Depalo's light `:root` into the token region of `globals.css`, so a change on either site is a copy-paste. HSL triplet convention, `hsl(var(--x))` at point of use.

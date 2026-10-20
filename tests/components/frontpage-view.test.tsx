@@ -32,25 +32,23 @@ describe("FrontPageView", () => {
     expect(feed?.className).not.toContain("18rem");
   });
 
-  it("renders the rail when it has real content, and never repeats the lead", () => {
+  it("never renders a side rail of links, and never repeats the lead in another band", () => {
     const vids = [1, 2, 3, 4].map((n) =>
       entry({ kind: "video", slug: `v${n}`, date: `2026-10-0${n}` }),
     );
-    // Newest item overall, so the video is the lead; the rail's Watch block must
-    // surface the other videos without listing the lead again.
+    // Newest item overall, so the video is the lead; the Watch band must surface
+    // the other videos without listing the lead again.
     const leadVideo = entry({ kind: "video", slug: "v-lead", date: "2026-10-20" });
-    const { container } = view(4, [...vids, leadVideo]);
+    const { container } = view(4, [...vids, leadVideo], [project({ slug: "a" }), project({ slug: "b" })]);
 
-    const rail = container.querySelector('[data-band="rail"]');
-    const feed = container.querySelector('[data-band="feed"]');
-    expect(rail).toBeTruthy();
-    expect(feed?.className).toContain("18rem");
+    expect(container.querySelector('[data-band="rail"]')).toBeNull();
+    expect(container.querySelector("aside")).toBeNull();
 
     const leadHref = container.querySelector('[data-band="lead"] a')?.getAttribute("href");
     expect(leadHref).toBe("/watch/v-lead/");
-    const railHrefs = [...rail!.querySelectorAll("a")].map((link) => link.getAttribute("href"));
-    expect(railHrefs.length).toBeGreaterThan(0);
-    expect(railHrefs).not.toContain(leadHref);
+    const watchHrefs = [...container.querySelectorAll('[data-band="watch"] a')].map((link) => link.getAttribute("href"));
+    expect(watchHrefs.length).toBeGreaterThan(0);
+    expect(watchHrefs).not.toContain(leadHref);
   });
 
   it.each([

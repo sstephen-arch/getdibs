@@ -3,7 +3,6 @@ import { topicPath } from "@/content/routes";
 import { SITE } from "@/lib/site";
 import { Card } from "./Card";
 import { Lead } from "./Lead";
-import { Rail } from "./Rail";
 import { Band } from "./Band";
 import { ProjectCard } from "./ProjectCard";
 import { SectionHeader } from "./SectionHeader";
@@ -34,8 +33,6 @@ export function FrontPageView({ page, now }: { page: FrontPage; now: Date }) {
     );
   }
 
-  const hasRail = page.watch.length > 0 || page.projects.length > 0 || page.topics.length > 0;
-
   /* Sections are numbered in the order they render, so a band that is waiting
      for its minimum never leaves a gap in the count. */
   let section = 0;
@@ -58,20 +55,16 @@ export function FrontPageView({ page, now }: { page: FrontPage; now: Date }) {
         </section>
       )}
 
+      {/* No side rail of links: projects, watch and topics each get a band of
+          their own below, so a rail would only repeat them as bare links. */}
       {page.feed.length > 0 && (
-        <section
-          data-band="feed"
-          className={`grid gap-x-8 gap-y-5 py-10 ${hasRail ? "lg:grid-cols-[1fr_18rem]" : ""}`}
-        >
-          <div className="col-span-full -mb-5">
-            <SectionHeader index={next()} label="The log" href="/archive/" linkLabel="Archive" />
-          </div>
-          <div className="flex flex-col divide-y divide-border self-start overflow-hidden rounded-lg border border-border bg-card shadow-sm">
+        <section data-band="feed" className="py-10">
+          <SectionHeader index={next()} label="More writing" href="/archive/" linkLabel="Archive" />
+          <div className="flex flex-col divide-y divide-border overflow-hidden rounded-lg border border-border bg-card shadow-sm">
             {page.feed.map((entry) => (
               <Card key={entry.slug} entry={entry} size="row" now={now} />
             ))}
           </div>
-          {hasRail && <Rail page={page} />}
         </section>
       )}
 
@@ -102,9 +95,8 @@ export function FrontPageView({ page, now }: { page: FrontPage; now: Date }) {
               <li key={topic.slug}>
                 <a
                   href={topicPath(topic.slug)}
-                  className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 font-ui text-sm font-medium no-underline shadow-sm hover:border-primary/50 hover:text-primary"
+                  className="inline-flex items-center rounded-full border border-border bg-card px-4 py-2 font-ui text-sm font-medium no-underline shadow-sm transition-shadow hover:shadow-md"
                 >
-                  <span className="record text-muted-foreground">#</span>
                   {topic.name}
                 </a>
               </li>

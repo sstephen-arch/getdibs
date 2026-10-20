@@ -139,6 +139,20 @@ describe("loadContent", () => {
     expect(() => loadContent(root)).toThrow(/2026-10-19-a\.md: project "ghost" does not exist/);
   });
 
+  it("rejects a root-relative cover that is not in the public directory", () => {
+    mkdirSync(join(root, "public"), { recursive: true });
+    write("entries/2026-10-19-a.md", "---\nkind: essay\ntitle: A\nsummary: s\ncover: /covers/missing.webp\n---\n\nx\n");
+    expect(() => loadContent(root, join(root, "public"))).toThrow(/2026-10-19-a\.md: cover "\/covers\/missing\.webp" is not in/);
+  });
+
+  it("accepts a cover that exists, and never checks a remote one", () => {
+    mkdirSync(join(root, "public", "covers"), { recursive: true });
+    write("public/covers/a.webp", "");
+    write("entries/2026-10-19-a.md", "---\nkind: essay\ntitle: A\nsummary: s\ncover: /covers/a.webp\n---\n\nx\n");
+    write("entries/2026-10-18-b.md", "---\nkind: essay\ntitle: B\nsummary: s\ncover: https://x.test/b.jpg\n---\n\nx\n");
+    expect(loadContent(root, join(root, "public")).entries).toHaveLength(2);
+  });
+
   it("accepts an entry pointing at a real project", () => {
     write("projects/manifest.md", "---\ntitle: Manifest\nsummary: s\nstatus: shipped\nyear: \"2026\"\n---\n\nx\n");
     write("entries/2026-10-19-a.md", "---\nkind: essay\ntitle: A\nsummary: s\nproject: manifest\n---\n\nx\n");
