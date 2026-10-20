@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SITE } from "@/lib/site";
+import { Wordmark } from "./Wordmark";
 
 const NAV = [
   { href: "/essays/", label: "Essays" },
@@ -13,12 +14,10 @@ export function Masthead() {
   return (
     <header className="border-b border-border">
       <div className="mx-auto flex max-w-6xl flex-wrap items-baseline gap-x-6 gap-y-2 px-5 py-4">
-        <Link href="/" className="flex items-baseline gap-3 no-underline">
-          <span className="text-2xl font-semibold tracking-tight text-foreground">
-            {SITE.name}
-          </span>
-          {/* The domain is part of the design, not something to work around. */}
-          <span className="record text-xs text-muted-foreground">{SITE.domain}</span>
+        {/* The wordmark is the domain: `get dibs.io` types itself as a command, so
+            there is no separate DIBS lockup sitting next to it. */}
+        <Link href="/" className="no-underline" aria-label={`${SITE.name}, home`}>
+          <Wordmark />
         </Link>
         <nav aria-label="Sections" className="ml-auto flex flex-wrap gap-x-5 gap-y-1">
           {NAV.map((item) => (
