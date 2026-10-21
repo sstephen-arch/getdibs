@@ -19,13 +19,13 @@ export function SectionHeader({
 }) {
   return (
     <div className="mb-6 flex items-center gap-4">
-      <Heading className="eyebrow m-0 shrink-0">
-        {index !== undefined && <span className="text-muted-foreground">{String(index).padStart(2, "0")} / </span>}
+      <Heading className="m-0 shrink-0 font-display text-2xl font-bold tracking-tight">
+        {index !== undefined && <span className="mr-2 text-primary">{String(index).padStart(2, "0")}</span>}
         {label}
       </Heading>
-      <span aria-hidden className="h-px flex-1 bg-border" />
+      <span aria-hidden className="h-0.5 flex-1 bg-foreground" />
       {href && (
-        <Link href={href} className="shrink-0 font-ui text-sm font-medium text-muted-foreground no-underline hover:text-primary">
+        <Link href={href} className="shrink-0 font-ui text-sm font-bold text-foreground no-underline hover:text-primary">
           {linkLabel ?? `All ${label.toLowerCase()}`} →
         </Link>
       )}

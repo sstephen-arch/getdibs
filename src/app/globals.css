@@ -1,32 +1,32 @@
 @import "tailwindcss";
 
-/* Ported verbatim from depaloconsultingllc.com's light theme. Same names, same
-   values, so a change on either site is a copy-paste. There is one stock: the dark
-   wire was retired on 2026-10-20, so every page is paper and ink, like the source
-   site. Depalo's --chart-1..6 are deliberately not ported: there are no charts. */
+/* The Bold look (21 Oct 2026): white paper, near-black ink and heavy black rules,
+   one electric blue and one yellow. Borders are ink on purpose, so every card and
+   rule reads as a printed line; --hairline is the quiet grey for prose furniture. */
 /* --tokens-start-- */
 :root {
-  --background: 36 33% 97%;
-  --foreground: 40 6% 10%;
+  --background: 0 0% 100%;
+  --foreground: 0 0% 4%;
   --card: 0 0% 100%;
-  --card-foreground: 40 6% 10%;
+  --card-foreground: 0 0% 4%;
   --popover: 0 0% 100%;
-  --popover-foreground: 40 6% 10%;
-  --primary: 224 75% 48%;
+  --popover-foreground: 0 0% 4%;
+  --primary: 230 100% 58%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 40 24% 93%;
-  --secondary-foreground: 40 6% 10%;
-  --muted: 40 24% 93%;
-  --muted-foreground: 38 5% 40%;
-  --accent: 40 24% 93%;
-  --accent-foreground: 40 6% 10%;
+  --secondary: 230 40% 96%;
+  --secondary-foreground: 0 0% 4%;
+  --muted: 230 30% 96%;
+  --muted-foreground: 0 0% 34%;
+  --accent: 230 30% 96%;
+  --accent-foreground: 0 0% 4%;
   --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 98%;
-  --border: 37 21% 88%;
-  --input: 37 21% 88%;
-  --ring: 224 75% 48%;
-  --highlight: 32 95% 44%;
+  --border: 0 0% 4%;
+  --input: 0 0% 4%;
+  --ring: 230 100% 58%;
+  --highlight: 50 100% 65%;
   --live: 149 66% 30%;
+  --hairline: 0 0% 86%;
 }
 /* --tokens-end-- */
 
@@ -50,11 +50,17 @@
   --color-highlight: hsl(var(--highlight));
   --color-live: hsl(var(--live));
 
-  --font-display: var(--font-source-serif);
-  --font-ui: var(--font-inter);
+  --font-display: var(--font-grotesk);
+  --font-ui: var(--font-grotesk);
   --font-mono: var(--font-jetbrains);
 
-  --radius-control: 0.5rem;
+  --radius-control: 0;
+
+  /* Square corners and no soft shadows anywhere: depth comes from rules. */
+  --radius-md: 0;
+  --radius-lg: 0;
+  --shadow-sm: none;
+  --shadow-md: none;
 }
 
 html {
@@ -66,7 +72,7 @@ body {
   margin: 0;
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
-  font-family: var(--font-ui), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -93,11 +99,12 @@ body {
   color: hsl(var(--primary));
 }
 
-/* Long-form body. Serif at a comfortable size, with the developer furniture
-   (code, tables, rules) set in the UI and mono faces so it reads as a record. */
+/* Long-form body. Inter at a comfortable size: the grotesk carries headlines,
+   Inter carries paragraphs, and the developer furniture (code, tables, rules)
+   stays in the mono face so it reads as a record. */
 .prose-body {
-  font-family: var(--font-source-serif), ui-serif, Georgia, serif;
-  font-size: 1.125rem;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.0625rem;
   line-height: 1.75;
   color: hsl(var(--foreground));
 }
@@ -110,17 +117,19 @@ body {
 .prose-body h2 {
   margin: 2.6em 0 0.6em;
   padding-top: 1.1em;
-  border-top: 1px solid hsl(var(--border));
-  font-size: 1.625rem;
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
+  border-top: 2px solid hsl(var(--border));
+  font-family: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
   scroll-margin-top: 5rem;
 }
 .prose-body h3 {
   margin: 2em 0 0.5em;
+  font-family: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
   font-size: 1.25rem;
-  font-weight: 600;
+  font-weight: 700;
   scroll-margin-top: 5rem;
 }
 .prose-body a {
@@ -162,21 +171,21 @@ body {
 .prose-body hr {
   margin: 2.5em 0;
   border: 0;
-  border-top: 1px solid hsl(var(--border));
+  border-top: 1px solid hsl(var(--hairline));
 }
 .prose-body img {
   margin: 2em 0;
   max-width: 100%;
   height: auto;
-  border: 1px solid hsl(var(--border));
-  border-radius: 0.5rem;
+  border: 1px solid hsl(var(--hairline));
+  border-radius: 0;
 }
 .prose-body code {
   font-family: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.84em;
   padding: 0.12em 0.36em;
-  border: 1px solid hsl(var(--border));
-  border-radius: 0.3rem;
+  border: 1px solid hsl(var(--hairline));
+  border-radius: 0;
   background: hsl(var(--muted));
   overflow-wrap: anywhere;
 }
@@ -184,8 +193,8 @@ body {
   margin: 1.6em 0;
   padding: 1rem 1.15rem;
   overflow-x: auto;
-  border: 1px solid hsl(var(--border));
-  border-radius: 0.5rem;
+  border: 1px solid hsl(var(--hairline));
+  border-radius: 0;
   background: hsl(var(--muted));
   font-size: 0.875rem;
   line-height: 1.6;
@@ -205,8 +214,8 @@ body {
 .prose-body .table-scroll {
   margin: 1.8em 0;
   overflow-x: auto;
-  border: 1px solid hsl(var(--border));
-  border-radius: 0.5rem;
+  border: 1px solid hsl(var(--hairline));
+  border-radius: 0;
   background: hsl(var(--card));
 }
 .prose-body table {
@@ -219,7 +228,7 @@ body {
 }
 .prose-body th {
   padding: 0.6rem 0.85rem;
-  border-bottom: 1px solid hsl(var(--border));
+  border-bottom: 1px solid hsl(var(--hairline));
   background: hsl(var(--muted));
   font-family: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.6875rem;
@@ -232,7 +241,7 @@ body {
 }
 .prose-body td {
   padding: 0.55rem 0.85rem;
-  border-bottom: 1px solid hsl(var(--border));
+  border-bottom: 1px solid hsl(var(--hairline));
   vertical-align: top;
 }
 .prose-body tr:last-child td {

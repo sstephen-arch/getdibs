@@ -23,8 +23,8 @@ export function Kicker({ entry }: { entry: Entry }) {
   const topic = TOPICS.find((item) => item.slug === entry.topics?.[0]);
   const label = entry.kind === "link" || !topic ? KIND_LABELS[entry.kind] : topic.name;
   return (
-    <span className={`${KICKER} inline-flex items-center gap-2 text-foreground`}>
-      <span aria-hidden className="size-2 rounded-full" style={{ backgroundColor: topicColour(topic?.slug) }} />
+    <span className="inline-flex items-center gap-2 bg-foreground px-2 py-1 font-mono text-[0.6875rem] font-medium uppercase leading-none tracking-[0.06em] text-background">
+      <span aria-hidden className="size-2" style={{ backgroundColor: topicColour(topic?.slug) }} />
       {label}
     </span>
   );

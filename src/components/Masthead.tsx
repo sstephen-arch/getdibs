@@ -16,7 +16,7 @@ export type Section = (typeof NAV)[number]["section"];
  *  reads as the page and the bar reads as furniture. */
 export function Masthead({ section }: { section?: Section }) {
   return (
-    <header className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/85">
+    <header className="sticky top-0 z-30 border-b-2 border-border bg-card">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-5 py-3">
         {/* The wordmark is the domain: `get dibs.io` types itself as a command, so
             there is no separate DIBS lockup sitting next to it. */}
@@ -33,8 +33,8 @@ export function Masthead({ section }: { section?: Section }) {
                 aria-current={current ? "true" : undefined}
                 className={`rounded-control px-2.5 py-1.5 font-ui text-sm font-medium no-underline transition-colors ${
                   current
-                    ? "bg-muted text-foreground"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    ? "bg-foreground text-background"
+                    : "text-foreground hover:bg-highlight"
                 }`}
               >
                 {item.label}

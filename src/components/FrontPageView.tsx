@@ -7,24 +7,52 @@ import { Band } from "./Band";
 import { ProjectCard } from "./ProjectCard";
 import { SectionHeader } from "./SectionHeader";
 
-/** Whose site this is and what it is for, said once, above everything else. */
+export interface SiteCount {
+  value: number;
+  label: string;
+}
+
+/** Whose site this is and what it is for, said once, above everything else, on
+ *  the one blue block the site allows itself. */
 function Intro() {
   return (
-    <section className="border-b border-border pt-12 pb-10 sm:pt-16">
-      <p className="eyebrow m-0">{SITE.author} · notes from the build</p>
-      <h1 className="mt-4 mb-0 max-w-3xl font-display text-[clamp(2rem,5vw,3.5rem)] font-semibold leading-[1.06] tracking-tight">
-        What I&rsquo;m building with AI, with the numbers left in.
-      </h1>
-      <p className="mt-5 mb-0 max-w-2xl font-display text-lg leading-relaxed text-muted-foreground">
-        I run Claude Code most days and local models on my own Mac. This is where I
-        write up what actually happened: the tokens, the test results, the failures,
-        and the parts worth copying.
-      </p>
+    <section className="bg-primary text-primary-foreground">
+      <div className="mx-auto grid max-w-6xl items-end gap-8 px-5 pt-14 pb-12 sm:pt-20 lg:grid-cols-[1.5fr_1fr]">
+        <div>
+          <p className="m-0 font-mono text-xs font-medium uppercase tracking-[0.12em] text-primary-foreground/80">
+            {SITE.author} · notes from the build
+          </p>
+          <h1 className="mt-4 mb-0 font-display text-[clamp(2.5rem,7vw,5.25rem)] font-bold leading-[0.95] tracking-[-0.045em]">
+            Building with AI. Numbers left in.
+          </h1>
+        </div>
+        <p className="m-0 max-w-md text-lg leading-relaxed text-primary-foreground/85">
+          I run Claude Code most days and local models on my own Mac. This is where I
+          write up what actually happened: the tokens, the test results, the failures,
+          and the parts worth copying.
+        </p>
+      </div>
     </section>
   );
 }
 
-export function FrontPageView({ page, now }: { page: FrontPage; now: Date }) {
+/** What is here, counted from the content itself so it can never go stale. */
+function Counts({ counts }: { counts: SiteCount[] }) {
+  return (
+    <section aria-label="On this site" className="border-b-2 border-border">
+      <dl className="mx-auto m-0 grid max-w-6xl grid-cols-2 sm:grid-cols-4">
+        {counts.map((count) => (
+          <div key={count.label} className="flex flex-col border-border px-5 py-5 odd:border-r-2 sm:border-r-2 sm:last:border-r-0">
+            <dt className="order-2 font-ui text-sm text-muted-foreground">{count.label}</dt>
+            <dd className="order-1 m-0 font-display text-4xl font-bold tracking-tight">{count.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  );
+}
+
+export function FrontPageView({ page, now, counts = [] }: { page: FrontPage; now: Date; counts?: SiteCount[] }) {
   if (page.state === "empty") {
     return (
       <div className="mx-auto max-w-6xl px-5 py-16">
@@ -39,8 +67,10 @@ export function FrontPageView({ page, now }: { page: FrontPage; now: Date }) {
   const next = () => ++section;
 
   return (
+    <>
+    <Intro />
+    {counts.length > 0 && <Counts counts={counts} />}
     <div className="mx-auto max-w-6xl px-5">
-      <Intro />
 
       <Lead entry={page.lead} index={next()} now={now} />
 
@@ -105,5 +135,6 @@ export function FrontPageView({ page, now }: { page: FrontPage; now: Date }) {
         </Band>
       )}
     </div>
+    </>
   );
 }

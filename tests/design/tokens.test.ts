@@ -1,31 +1,32 @@
 import { describe, expect, it } from "vitest";
 import { ROOT, readTokenScopes } from "../helpers/tokens";
 
-/* Copied verbatim from depaloconsultingllc.com's light `:root` (spec §7.2). If a
-   value drifts from the source site, this test is the thing that notices. */
+/* The Bold palette (21 Oct 2026). If a value drifts, this test is the thing
+   that notices. */
 const EXPECTED = {
   [ROOT]: {
-    background: "36 33% 97%",
-    foreground: "40 6% 10%",
+    background: "0 0% 100%",
+    foreground: "0 0% 4%",
     card: "0 0% 100%",
-    "card-foreground": "40 6% 10%",
+    "card-foreground": "0 0% 4%",
     popover: "0 0% 100%",
-    "popover-foreground": "40 6% 10%",
-    primary: "224 75% 48%",
+    "popover-foreground": "0 0% 4%",
+    primary: "230 100% 58%",
     "primary-foreground": "0 0% 100%",
-    secondary: "40 24% 93%",
-    "secondary-foreground": "40 6% 10%",
-    muted: "40 24% 93%",
-    "muted-foreground": "38 5% 40%",
-    accent: "40 24% 93%",
-    "accent-foreground": "40 6% 10%",
+    secondary: "230 40% 96%",
+    "secondary-foreground": "0 0% 4%",
+    muted: "230 30% 96%",
+    "muted-foreground": "0 0% 34%",
+    accent: "230 30% 96%",
+    "accent-foreground": "0 0% 4%",
     destructive: "0 72% 51%",
     "destructive-foreground": "0 0% 98%",
-    border: "37 21% 88%",
-    input: "37 21% 88%",
-    ring: "224 75% 48%",
-    highlight: "32 95% 44%",
+    border: "0 0% 4%",
+    input: "0 0% 4%",
+    ring: "230 100% 58%",
+    highlight: "50 100% 65%",
     live: "149 66% 30%",
+    hairline: "0 0% 86%",
   },
 } as const;
 

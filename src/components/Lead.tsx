@@ -22,7 +22,7 @@ export function Lead({ entry, index, now }: { entry: Entry; index?: number; now:
               {formatWhen(`${entry.date}T00:00:00Z`, now)}
             </time>
           </div>
-          <h2 className="m-0 font-display text-[clamp(1.875rem,3.6vw,2.75rem)] font-semibold leading-[1.1] tracking-tight">
+          <h2 className="m-0 font-display text-[clamp(1.875rem,3.6vw,2.75rem)] font-bold leading-[1.02] tracking-[-0.035em]">
             <Link href={entryPath(entry)} className="no-underline after:absolute after:inset-0 after:content-['']">
               {entry.title}
             </Link>

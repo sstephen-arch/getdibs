@@ -58,10 +58,10 @@ function ShortVersion({ takeaways }: { takeaways: string[] }) {
   return (
     <section
       aria-label="The short version"
-      className="mb-6 rounded-lg border border-l-4 border-border border-l-highlight bg-card px-5 py-4 shadow-sm"
+      className="mb-6 bg-highlight px-5 py-4 text-foreground"
     >
-      <p className="eyebrow m-0 mb-2 !text-highlight">The short version</p>
-      <ol className="m-0 flex list-decimal flex-col gap-1.5 pl-5 font-display marker:font-ui marker:text-sm marker:text-muted-foreground text-[1.0625rem] leading-relaxed">
+      <p className="m-0 mb-2 font-mono text-xs font-bold uppercase tracking-[0.1em]">The short version</p>
+      <ol className="m-0 flex list-decimal flex-col gap-1.5 pl-5 font-display marker:font-ui marker:text-sm marker:text-foreground text-[1.0625rem] leading-relaxed">
         {takeaways.map((point) => (
           <li key={point}>{point}</li>
         ))}
@@ -85,7 +85,7 @@ function Chips({ entry, sources }: { entry: Entry; sources: number }) {
       {chips.map((chip) => (
         <li
           key={chip}
-          className="record rounded-full border border-border bg-card px-3 py-1 text-[0.6875rem] text-muted-foreground"
+          className="record border border-border bg-card px-2.5 py-1 text-[0.6875rem] text-foreground"
         >
           {chip}
         </li>
@@ -126,7 +126,7 @@ export function Article({ entry, html, now }: { entry: Entry; html: string; now:
           )}
         </div>
 
-        <h1 className="mt-4 mb-3 max-w-3xl font-display text-[clamp(2rem,4.5vw,3rem)] font-semibold leading-[1.08] tracking-tight">
+        <h1 className="mt-4 mb-3 max-w-3xl font-display text-[clamp(2.25rem,5.5vw,3.75rem)] font-bold leading-[0.98] tracking-[-0.04em]">
           {entry.title}
         </h1>
 
@@ -158,7 +158,7 @@ export function Article({ entry, html, now }: { entry: Entry; html: string; now:
               <a
                 key={heading.id}
                 href={`#${heading.id}`}
-                className="rounded-md bg-muted px-2.5 py-1.5 text-foreground no-underline hover:bg-border"
+                className="bg-muted px-2.5 py-1.5 font-medium text-foreground no-underline hover:bg-highlight"
               >
                 {heading.text}
               </a>

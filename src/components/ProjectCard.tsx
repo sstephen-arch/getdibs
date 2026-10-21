@@ -25,7 +25,7 @@ export function ProjectCard({ project, as: Heading = "h3" }: { project: Project;
   return (
     <article className="group relative flex flex-col gap-3 rounded-lg border border-border bg-card p-5 shadow-sm transition-shadow duration-300 hover:shadow-md">
       <StatusPill project={project} />
-      <Heading className="m-0 font-display text-xl font-semibold leading-snug">
+      <Heading className="m-0 font-display text-xl font-bold leading-tight tracking-tight">
         <Link
           href={projectPath(project)}
           className="no-underline after:absolute after:inset-0 after:content-['']"

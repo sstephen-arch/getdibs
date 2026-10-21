@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
-import { Source_Serif_4, Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@/components/Analytics";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
-const serif = Source_Serif_4({
+const grotesk = Space_Grotesk({
   subsets: ["latin"],
-  weight: ["400", "600"],
-  style: ["normal", "italic"],
-  variable: "--font-source-serif",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-grotesk",
   display: "swap",
 });
 
@@ -34,7 +33,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${serif.variable} ${ui.variable} ${mono.variable}`}>
+    <html lang="en" className={`${grotesk.variable} ${ui.variable} ${mono.variable}`}>
       <body>
         {children}
         <Analytics />

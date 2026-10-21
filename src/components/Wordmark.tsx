@@ -8,7 +8,7 @@
  *  as "get dibs.io" on its own. */
 export function Wordmark() {
   return (
-    <span className="record flex items-baseline text-2xl leading-none">
+    <span className="flex items-baseline font-display text-2xl font-bold leading-none tracking-tight">
       <span aria-hidden className="select-none text-muted-foreground">
         $
       </span>

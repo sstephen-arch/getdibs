@@ -62,7 +62,7 @@ export function Card({
         <Cover entry={entry} className="aspect-[16/10] rounded-md border border-border" />
         <div className="flex flex-col gap-2">
           <Meta entry={entry} now={now} />
-          <h3 className="m-0 font-display text-xl font-semibold leading-snug">{title}</h3>
+          <h3 className="m-0 font-display text-xl font-bold leading-tight tracking-tight">{title}</h3>
           <p className="m-0 text-sm leading-relaxed text-muted-foreground">{entry.summary}</p>
         </div>
       </article>
@@ -74,7 +74,7 @@ export function Card({
       <Cover entry={entry} className="aspect-[16/10] border-b border-border" />
       <div className="flex flex-1 flex-col gap-2.5 p-5">
         <Meta entry={entry} now={now} />
-        <h3 className="m-0 font-display text-xl font-semibold leading-snug">{title}</h3>
+        <h3 className="m-0 font-display text-xl font-bold leading-tight tracking-tight">{title}</h3>
         <p className="m-0 line-clamp-3 text-sm leading-relaxed text-muted-foreground">{entry.summary}</p>
       </div>
     </article>
