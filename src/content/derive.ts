@@ -27,6 +27,27 @@ export function noteHeadline(body: string, max = 160): string {
   return `${(lastSpace > 0 ? clipped.slice(0, lastSpace) : clipped).trimEnd()}…`;
 }
 
+export function videoIdOf(entry: { video_id?: string; video_url?: string }): string | null {
+  if (entry.video_id) return entry.video_id;
+  if (!entry.video_url) return null;
+  const match = entry.video_url.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{6,})/);
+  return match ? match[1] : null;
+}
+
+/** A video with no cover of its own shows the video's own YouTube thumbnail in
+ *  every image slot, not a plate. The article page plays the video instead, so
+ *  this only reaches cards, the lead and the share preview. */
+export function videoCover(entry: {
+  kind: string;
+  cover?: string;
+  video_id?: string;
+  video_url?: string;
+}): string | undefined {
+  if (entry.cover || entry.kind !== "video") return entry.cover;
+  const id = videoIdOf(entry);
+  return id ? `https://i.ytimg.com/vi/${id}/maxresdefault.jpg` : undefined;
+}
+
 export function sortEntries<T extends { date: string; slug: string }>(items: T[]): T[] {
   return [...items].sort(
     (a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug),

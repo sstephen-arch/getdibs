@@ -8,6 +8,7 @@ import {
   parseFilename,
   publishedOnly,
   sortEntries,
+  videoCover,
 } from "./derive";
 import type { EntryFrontmatter, ProjectFrontmatter } from "./schema";
 import { ContentError, validateEntry, validateProject } from "./validate";
@@ -80,6 +81,7 @@ export function loadEntries(dir = "content/entries"): Entry[] {
     const derived = front.title === undefined;
     return {
       ...front,
+      cover: videoCover(front),
       slug: parsed.slug,
       date: entryDate(name, front.date),
       title: front.title ?? noteHeadline(body),

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { videoIdOf } from "@/content/derive";
 import type { Entry } from "@/content/load";
 import { headingsOf } from "@/content/render";
 import { SECTION_OF_KIND, topicPath } from "@/content/routes";
@@ -8,13 +9,6 @@ import { SITE } from "@/lib/site";
 import { Kicker } from "./KindTag";
 import { Prose } from "./Prose";
 import { VideoEmbed } from "./VideoEmbed";
-
-export function videoIdOf(entry: Entry): string | null {
-  if (entry.video_id) return entry.video_id;
-  if (!entry.video_url) return null;
-  const match = entry.video_url.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{6,})/);
-  return match ? match[1] : null;
-}
 
 /** Hostname for a link-out. Frontmatter is validated at load time, so a bad URL
  *  never reaches here; the try keeps a render from throwing if one ever does. */

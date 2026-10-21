@@ -6,6 +6,8 @@ import {
   parseFilename,
   publishedOnly,
   sortEntries,
+  videoCover,
+  videoIdOf,
 } from "@/content/derive";
 import { ContentError } from "@/content/validate";
 
@@ -110,5 +112,39 @@ describe("assertUniqueSlugs", () => {
         "entry",
       ),
     ).toThrow(/2026-02-01-HELLO\.md: duplicate entry slug "hello"/);
+  });
+});
+
+describe("videoIdOf", () => {
+  it("prefers an explicit video_id", () => {
+    expect(videoIdOf({ video_id: "3mx84MRj8lY", video_url: "https://youtu.be/other123456" })).toBe("3mx84MRj8lY");
+  });
+
+  it("reads the id out of a watch, short or embed URL", () => {
+    expect(videoIdOf({ video_url: "https://www.youtube.com/watch?v=3mx84MRj8lY" })).toBe("3mx84MRj8lY");
+    expect(videoIdOf({ video_url: "https://youtu.be/3mx84MRj8lY" })).toBe("3mx84MRj8lY");
+    expect(videoIdOf({ video_url: "https://www.youtube.com/embed/3mx84MRj8lY" })).toBe("3mx84MRj8lY");
+  });
+
+  it("returns null when there is nothing to read", () => {
+    expect(videoIdOf({})).toBeNull();
+    expect(videoIdOf({ video_url: "https://vimeo.com/1" })).toBeNull();
+  });
+});
+
+describe("videoCover", () => {
+  it("uses the YouTube thumbnail for a video with no cover", () => {
+    expect(videoCover({ kind: "video", video_id: "3mx84MRj8lY" })).toBe(
+      "https://i.ytimg.com/vi/3mx84MRj8lY/maxresdefault.jpg",
+    );
+  });
+
+  it("keeps a cover the author set", () => {
+    expect(videoCover({ kind: "video", video_id: "3mx84MRj8lY", cover: "/covers/x.webp" })).toBe("/covers/x.webp");
+  });
+
+  it("leaves other kinds and unreadable videos alone", () => {
+    expect(videoCover({ kind: "essay" })).toBeUndefined();
+    expect(videoCover({ kind: "video", video_url: "https://vimeo.com/1" })).toBeUndefined();
   });
 });
