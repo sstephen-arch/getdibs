@@ -58,6 +58,15 @@ const ENTITIES: Record<string, string> = { amp: "&", lt: "<", gt: ">", quot: '"'
 /** The second-level headings of rendered HTML, in order, for an "On this page"
  *  list. Read from the output rather than the markdown so the ids are exactly
  *  the ones rehype-slug wrote. */
+/** How many distinct outside pages the body links to: the "sources" a reader can
+ *  check. Links back into this site and in-page anchors are not sources. */
+export function sourceCount(html: string): number {
+  const urls = [...html.matchAll(/<a [^>]*href="(https?:\/\/[^"]+)"/g)]
+    .map(([, url]) => url)
+    .filter((url) => !/^https?:\/\/(www\.)?getdibs\.io(\/|$)/.test(url));
+  return new Set(urls).size;
+}
+
 export function headingsOf(html: string): Heading[] {
   return [...html.matchAll(/<h2 id="([^"]+)">([\s\S]*?)<\/h2>/g)].map(([, id, inner]) => ({
     id,

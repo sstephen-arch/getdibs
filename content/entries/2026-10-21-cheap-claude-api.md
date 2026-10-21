@@ -3,6 +3,13 @@ kind: essay
 title: "That Cheap Claude API Might Not Be Claude"
 summary: "A whole market sells Claude tokens at 70 to 90% off. The margin comes from a swapped model, a farmed or stolen account, or your own prompts being resold, and it lands on IT's desk."
 topics: ["claude-code"]
+takeaways:
+  - "Grey-market sellers offer Claude at 70 to 90% off through proxies called transfer stations."
+  - "The discount comes from a swapped model, farmed or stolen accounts, or your prompts being harvested."
+  - "SaaS discovery won't see it. One ANTHROPIC_BASE_URL setting sends everything to the proxy."
+  - "Inventory AI endpoints, allowlist egress, and make the approved path easy."
+audience: "IT, security and engineering leads"
+checked: "2026-10-21"
 ---
 
 I'm always looking for a better deal on Claude tokens. There's a whole market for it. Some sites sell seats on shared Claude chat accounts. Others sell API keys well below Anthropic's prices.

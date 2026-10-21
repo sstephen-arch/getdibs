@@ -152,6 +152,62 @@ describe("Article stats", () => {
   });
 });
 
+describe("Article briefing", () => {
+  const SECTIONS = '<h2 id="one">One</h2><p>a</p><h2 id="two">Two</h2><p>b</p><h2 id="three">Three</h2>';
+
+  it("leads with the short version and drops the standfirst it replaces", () => {
+    render(
+      <Article
+        entry={entry({ kind: "essay", title: "T", slug: "tldr", summary: "The standfirst.", takeaways: ["First point.", "Second point."] })}
+        html=""
+        now={NOW}
+      />,
+    );
+    const box = screen.getByRole("region", { name: "The short version" });
+    expect([...box.querySelectorAll("li")].map((li) => li.textContent)).toEqual(["First point.", "Second point."]);
+    expect(screen.queryByText("The standfirst.")).toBeNull();
+  });
+
+  it("keeps the standfirst when there is no short version", () => {
+    render(<Article entry={entry({ kind: "essay", title: "T", slug: "nos", summary: "The standfirst." })} html="" now={NOW} />);
+    expect(screen.getByText("The standfirst.")).toBeTruthy();
+    expect(screen.queryByRole("region", { name: "The short version" })).toBeNull();
+  });
+
+  it("shows read time, source count, fact-check date and audience as chips", () => {
+    render(
+      <Article
+        entry={entry({ kind: "essay", title: "T", slug: "chips", checked: "2026-10-21", audience: "IT and security leads" })}
+        html='<p><a href="https://a.test/1">a</a> <a href="https://b.test">b</a></p>'
+        now={NOW}
+      />,
+    );
+    const chips = [...screen.getByRole("list", { name: "About this piece" }).querySelectorAll("li")].map((li) => li.textContent);
+    expect(chips).toEqual(["1 min read", "2 sources", "Fact-checked 21 October", "For IT and security leads"]);
+  });
+
+  it("says one source, and leaves the chip out when there are none", () => {
+    const { rerender } = render(
+      <Article entry={entry({ kind: "essay", title: "T", slug: "one" })} html='<a href="https://a.test">a</a>' now={NOW} />,
+    );
+    expect(screen.getByText("1 source")).toBeTruthy();
+    rerender(<Article entry={entry({ kind: "essay", title: "T", slug: "none" })} html="<p>x</p>" now={NOW} />);
+    expect(screen.queryByText(/sources?$/)).toBeNull();
+  });
+
+  it("turns the sections into jump links in one column, with no sidebar", () => {
+    const { container } = render(<Article entry={entry({ kind: "essay", title: "T", slug: "jump" })} html={SECTIONS} now={NOW} />);
+    const jump = screen.getByRole("navigation", { name: "Jump to a section" });
+    expect([...jump.querySelectorAll("a")].map((a) => a.getAttribute("href"))).toEqual(["#one", "#two", "#three"]);
+    expect(container.querySelector("aside nav")).toBeNull();
+  });
+
+  it("skips jump links when there is little to jump between", () => {
+    render(<Article entry={entry({ kind: "essay", title: "T", slug: "few" })} html='<h2 id="one">One</h2>' now={NOW} />);
+    expect(screen.queryByRole("navigation", { name: "Jump to a section" })).toBeNull();
+  });
+});
+
 describe("VideoEmbed", () => {
   it("always offers a text link to the source", () => {
     render(<VideoEmbed id="abc123" title="A talk" channel="Some Channel" url="https://youtube.com/watch?v=abc123" />);

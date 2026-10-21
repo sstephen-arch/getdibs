@@ -3,6 +3,11 @@ kind: essay
 title: "Reverse Engineer Anything. Just Don't Reverse Engineer Your Vendors."
 summary: "A coding agent can now take a licensed app apart and hand back pseudocode from one command. The licence you signed still says no, and a clean room is the version that holds up."
 topics: ["building"]
+takeaways:
+  - "A coding agent can now take a compiled app apart and hand back pseudocode from one command."
+  - "Your vendor's license almost certainly bars reverse engineering, and those clauses usually survive cancelling."
+  - "Clean-room building, on open standards and open source, is the version that holds up."
+  - "Whatever you build or buy, read the data terms before you sign."
 ---
 
 A GitHub repo called REA (Reverse Engineer Anything) has racked up over 300k stars. It lets a coding agent like Claude Code drive real reverse-engineering tools against compiled apps and hand back pseudocode and a map of how the software works. Work that took a security researcher weeks now starts with one command.

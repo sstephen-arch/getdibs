@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { headingsOf, renderMarkdown } from "@/content/render";
+import { headingsOf, renderMarkdown, sourceCount } from "@/content/render";
 
 describe("renderMarkdown", () => {
   it("renders paragraphs", async () => {
@@ -72,5 +72,19 @@ describe("headingsOf", () => {
 
   it("returns nothing for a body without headings", () => {
     expect(headingsOf("<p>Just text.</p>")).toEqual([]);
+  });
+});
+
+describe("sourceCount", () => {
+  it("counts distinct outside links, once each", async () => {
+    const html = await renderMarkdown(
+      "[a](https://a.test/1) and [again](https://a.test/1), [b](https://a.test/2), [c](http://c.test)",
+    );
+    expect(sourceCount(html)).toBe(3);
+  });
+
+  it("does not count links back into the site or anchors", async () => {
+    const html = await renderMarkdown("[home](https://getdibs.io/essays/) [up](#top) [rel](/notes/)");
+    expect(sourceCount(html)).toBe(0);
   });
 });

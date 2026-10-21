@@ -54,6 +54,25 @@ describe("validateEntry", () => {
     expect(() => validateEntry("e.md", { ...base, stats: [{ value: "1" }] })).toThrow(/stats\[0\] needs both value and label/);
   });
 
+  it("accepts a short version of 1 to 5 takeaways, an audience and a fact-check date", () => {
+    const front = validateEntry("e.md", {
+      ...base,
+      takeaways: ["One.", "Two."],
+      audience: "IT and security leads",
+      checked: "2026-10-21",
+    });
+    expect(front.takeaways).toEqual(["One.", "Two."]);
+    expect(front.audience).toBe("IT and security leads");
+    expect(front.checked).toBe("2026-10-21");
+  });
+
+  it("rejects takeaways that are empty, too many, or not text", () => {
+    expect(() => validateEntry("e.md", { ...base, takeaways: [] })).toThrow(/"takeaways" must be a list of 1 to 5/);
+    expect(() => validateEntry("e.md", { ...base, takeaways: ["a", "b", "c", "d", "e", "f"] })).toThrow(/1 to 5/);
+    expect(() => validateEntry("e.md", { ...base, takeaways: ["ok", " "] })).toThrow(/takeaways\[1\]/);
+    expect(() => validateEntry("e.md", { ...base, checked: "21 Oct" })).toThrow(/checked must be YYYY-MM-DD/);
+  });
+
   it("requires url and source on a link", () => {
     expect(() => validateEntry("l.md", { ...base, kind: "link", source: "The Verge" }))
       .toThrow(/kind "link" requires "url"/);

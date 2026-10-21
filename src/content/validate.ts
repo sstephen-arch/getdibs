@@ -118,6 +118,20 @@ function optionalStats(file: string, data: Record<string, unknown>): EntryStat[]
   });
 }
 
+const MAX_TAKEAWAYS = 5;
+
+function optionalTakeaways(file: string, data: Record<string, unknown>): string[] | undefined {
+  const value = data.takeaways;
+  if (value === undefined) return undefined;
+  if (!Array.isArray(value) || value.length === 0 || value.length > MAX_TAKEAWAYS) {
+    fail(file, `"takeaways" must be a list of 1 to ${MAX_TAKEAWAYS} points`);
+  }
+  return value.map((item, index) => {
+    if (typeof item !== "string" || item.trim() === "") fail(file, `takeaways[${index}] must be a non-empty string`);
+    return item;
+  });
+}
+
 export function validateEntry(file: string, input: unknown): EntryFrontmatter {
   if (!isRecord(input)) fail(file, "frontmatter is missing");
 
@@ -160,6 +174,9 @@ export function validateEntry(file: string, input: unknown): EntryFrontmatter {
     cover_alt: optionalString(file, input, "cover_alt"),
     cover_credit: optionalString(file, input, "cover_credit"),
     stats: optionalStats(file, input),
+    takeaways: optionalTakeaways(file, input),
+    audience: optionalString(file, input, "audience"),
+    checked: optionalDate(file, input, "checked"),
     lead: optionalBoolean(file, input, "lead"),
     draft: optionalBoolean(file, input, "draft"),
     updated: optionalDate(file, input, "updated"),

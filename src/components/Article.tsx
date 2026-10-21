@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { videoIdOf } from "@/content/derive";
 import type { Entry } from "@/content/load";
-import { headingsOf } from "@/content/render";
+import { headingsOf, sourceCount } from "@/content/render";
 import { SECTION_OF_KIND, topicPath } from "@/content/routes";
 import { TOPICS } from "@/content/schema";
-import { formatWhen, readingMinutes } from "@/lib/format";
+import { formatDay, formatWhen, readingMinutes } from "@/lib/format";
 import { SITE } from "@/lib/site";
 import { Kicker } from "./KindTag";
 import { Prose } from "./Prose";
@@ -52,8 +52,49 @@ function Stats({ stats }: { stats: NonNullable<Entry["stats"]> }) {
   );
 }
 
-/** A table of contents earns its column only when there is something to jump
- *  between. */
+/** The point first: one to five takeaways in a box under the headline, for a
+ *  reader deciding whether the rest is worth their time. */
+function ShortVersion({ takeaways }: { takeaways: string[] }) {
+  return (
+    <section
+      aria-label="The short version"
+      className="mb-6 rounded-lg border border-l-4 border-border border-l-highlight bg-card px-5 py-4 shadow-sm"
+    >
+      <p className="eyebrow m-0 mb-2 !text-highlight">The short version</p>
+      <ol className="m-0 flex list-decimal flex-col gap-1.5 pl-5 font-display marker:font-ui marker:text-sm marker:text-muted-foreground text-[1.0625rem] leading-relaxed">
+        {takeaways.map((point) => (
+          <li key={point}>{point}</li>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
+/** What a reader can know about a piece before reading it, set as chips: how
+ *  long, how many sources, when it was checked, who it is for. */
+function Chips({ entry, sources }: { entry: Entry; sources: number }) {
+  const chips = [
+    `${readingMinutes(entry.body)} min read`,
+    sources > 0 ? `${sources} source${sources === 1 ? "" : "s"}` : null,
+    entry.checked ? `Fact-checked ${formatDay(entry.checked)}` : null,
+    entry.audience ? `For ${entry.audience}` : null,
+  ].filter((chip): chip is string => chip !== null);
+
+  return (
+    <ul aria-label="About this piece" className="m-0 mb-6 flex list-none flex-wrap gap-2 p-0">
+      {chips.map((chip) => (
+        <li
+          key={chip}
+          className="record rounded-full border border-border bg-card px-3 py-1 text-[0.6875rem] text-muted-foreground"
+        >
+          {chip}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** Jump links earn their row only when there is something to jump between. */
 const MIN_HEADINGS = 3;
 
 export function Article({ entry, html, now }: { entry: Entry; html: string; now: Date }) {
@@ -61,14 +102,12 @@ export function Article({ entry, html, now }: { entry: Entry; html: string; now:
   const linkHost = entry.kind === "link" && entry.url ? hostnameOf(entry.url) : null;
   const section = SECTION_OF_KIND[entry.kind];
   const headings = headingsOf(html);
-  const hasToc = headings.length >= MIN_HEADINGS;
+  const hasJump = headings.length >= MIN_HEADINGS;
   const topics = TOPICS.filter((topic) => entry.topics?.includes(topic.slug));
 
   return (
-    <div
-      className={`mx-auto grid max-w-6xl gap-12 px-5 py-10 ${hasToc ? "lg:grid-cols-[minmax(0,1fr)_15rem]" : ""}`}
-    >
-      <article className={`min-w-0 ${hasToc ? "" : "mx-auto w-full max-w-3xl"}`}>
+    <div className="mx-auto max-w-3xl px-5 py-10">
+      <article className="min-w-0">
         <nav aria-label="Breadcrumb" className="mb-6 font-ui text-sm text-muted-foreground">
           <Link href="/" className="no-underline hover:text-foreground">Home</Link>
           <span aria-hidden className="mx-2">/</span>
@@ -80,7 +119,6 @@ export function Article({ entry, html, now }: { entry: Entry; html: string; now:
           <time className="font-ui text-xs text-muted-foreground" dateTime={entry.date}>
             {formatWhen(`${entry.date}T12:00:00Z`, now)}
           </time>
-          <span className="font-ui text-xs text-muted-foreground">· {readingMinutes(entry.body)} min read</span>
           {entry.updated && (
             <span className="font-ui text-xs text-muted-foreground">
               · Updated {formatWhen(`${entry.updated}T12:00:00Z`, now)}
@@ -100,10 +138,32 @@ export function Article({ entry, html, now }: { entry: Entry; html: string; now:
           <span className="font-medium text-foreground">{entry.author ?? SITE.author}</span>
         </p>
 
-        {entry.summary && (
-          <p className="measure m-0 mb-8 font-display text-xl leading-relaxed text-muted-foreground">
-            {entry.summary}
-          </p>
+        <Chips entry={entry} sources={sourceCount(html)} />
+
+        {/* The short version replaces the standfirst rather than repeating it; the
+            summary still drives cards, feeds and share previews. */}
+        {entry.takeaways ? (
+          <ShortVersion takeaways={entry.takeaways} />
+        ) : (
+          entry.summary && (
+            <p className="measure m-0 mb-8 font-display text-xl leading-relaxed text-muted-foreground">
+              {entry.summary}
+            </p>
+          )
+        )}
+
+        {hasJump && (
+          <nav aria-label="Jump to a section" className="mb-10 flex flex-wrap gap-1.5 font-ui text-xs">
+            {headings.map((heading) => (
+              <a
+                key={heading.id}
+                href={`#${heading.id}`}
+                className="rounded-md bg-muted px-2.5 py-1.5 text-foreground no-underline hover:bg-border"
+              >
+                {heading.text}
+              </a>
+            ))}
+          </nav>
         )}
 
         {entry.stats && <Stats stats={entry.stats} />}
@@ -188,26 +248,6 @@ export function Article({ entry, html, now }: { entry: Entry; html: string; now:
           </p>
         </footer>
       </article>
-
-      {hasToc && (
-        <aside className="hidden lg:block">
-          <nav aria-label="On this page" className="sticky top-24 rounded-lg border border-border bg-card p-5 shadow-sm">
-            <p className="eyebrow m-0 mb-3">On this page</p>
-            <ol className="m-0 flex list-none flex-col gap-2 p-0 font-ui text-sm">
-              {headings.map((heading, i) => (
-                <li key={heading.id} className="flex gap-2">
-                  <span className="record shrink-0 text-[0.6875rem] leading-5 text-muted-foreground">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <a href={`#${heading.id}`} className="leading-5 text-muted-foreground no-underline hover:text-foreground">
-                    {heading.text}
-                  </a>
-                </li>
-              ))}
-            </ol>
-          </nav>
-        </aside>
-      )}
     </div>
   );
 }

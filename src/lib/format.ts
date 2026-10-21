@@ -29,6 +29,14 @@ export function formatWhen(iso: string, now: Date): string {
   }).format(then);
 }
 
+/** A calendar day as words, always absolute: "21 October". For records like a
+ *  fact-check date, where "2 hours ago" would be the wrong kind of answer. */
+export function formatDay(isoDate: string): string {
+  return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", timeZone: "UTC" }).format(
+    new Date(`${isoDate}T12:00:00Z`),
+  );
+}
+
 /** Minutes to read a markdown body at 230 words a minute, never less than one.
  *  Table pipes and code fences are not words, so they are not counted. */
 export function readingMinutes(body: string): number {

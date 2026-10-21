@@ -20,6 +20,11 @@ stats:
   - value: "$5,100"
     label: "at API list prices"
     detail: "I'm on a subscription, so notional"
+takeaways:
+  - "I pushed 11.5 billion tokens through Claude Code in under eight weeks, about $5,100 at list prices."
+  - "On my biggest project the agent read about 1,550 tokens for every one it wrote."
+  - "Every call resends the whole conversation, so context length is the multiplier, not the work."
+  - "Shorter sessions, a smaller CLAUDE.md and subagents for reading cut it the most."
 ---
 
 I use a lot of tokens. I knew that from the rate limit warnings. I did not know

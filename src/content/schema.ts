@@ -58,6 +58,13 @@ export interface EntryFrontmatter {
   cover_credit?: string;
   /** Up to four figures shown under the standfirst, for the credibility of a piece. */
   stats?: EntryStat[];
+  /** The short version: one to five points printed in a box under the headline,
+   *  in place of the standfirst, for a reader deciding whether to read on. */
+  takeaways?: string[];
+  /** Who the piece is for, printed as a chip, e.g. "IT and security leads". */
+  audience?: string;
+  /** The day every claim was last checked against its source (YYYY-MM-DD). */
+  checked?: string;
   lead?: boolean;
   draft?: boolean;
   updated?: string;

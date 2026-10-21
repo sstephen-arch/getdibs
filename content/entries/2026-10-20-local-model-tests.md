@@ -16,6 +16,11 @@ stats:
   - value: "13"
     label: "days of testing"
     detail: "2 to 18 October 2026"
+takeaways:
+  - "The only numbers worth trusting came from running the code. Every model made confident, wrong claims about its own work."
+  - "The reviewer mattered more than the writer. Cross-model review took one writer from 16.3% to 99.9%."
+  - "More thinking didn't reliably help, and the fastest model wasn't the best coder."
+  - "Long multi-file work is where models really separate, and no code benchmark shows it."
 ---
 
 I run models on my own machine and I want to know what they can be trusted with.
