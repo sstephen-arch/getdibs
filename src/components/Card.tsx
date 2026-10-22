@@ -58,7 +58,7 @@ export function Card({
 
   if (size === "row") {
     return (
-      <article className="group relative grid gap-5 p-5 transition-colors hover:bg-muted/40 sm:grid-cols-[13rem_1fr] sm:items-center">
+      <article className="group relative grid gap-5 p-5 transition-colors hover:bg-highlight/35 sm:grid-cols-[13rem_1fr] sm:items-center">
         <Cover entry={entry} className="aspect-[16/10] rounded-md border border-border" />
         <div className="flex flex-col gap-2">
           <Meta entry={entry} now={now} />
@@ -70,7 +70,7 @@ export function Card({
   }
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-sm transition-shadow duration-300 hover:shadow-md">
+    <article className="group relative flex flex-col overflow-hidden rounded-lg border border-border bg-card transition-[transform,box-shadow] duration-200 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_hsl(var(--foreground))]">
       <Cover entry={entry} className="aspect-[16/10] border-b border-border" />
       <div className="flex flex-1 flex-col gap-2.5 p-5">
         <Meta entry={entry} now={now} />

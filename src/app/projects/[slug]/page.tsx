@@ -47,7 +47,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           <span className="text-foreground">{project.slug}</span>
         </nav>
         <StatusPill project={project} />
-        <h1 className="mt-4 mb-3 font-display text-[clamp(2rem,4.5vw,3rem)] font-semibold leading-[1.08] tracking-tight">
+        <h1 className="mt-4 mb-3 font-display text-[clamp(2.25rem,5.5vw,3.75rem)] font-bold leading-[0.98] tracking-[-0.04em]">
           {project.title}
         </h1>
         {/* Projects have no author field: they are all this author's, and saying
@@ -68,7 +68,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-control border border-border bg-card px-3 py-1.5 font-ui text-sm font-medium no-underline shadow-sm hover:border-primary/50 hover:text-primary"
+                  className="inline-flex items-center gap-2 border-2 border-border bg-card px-3 py-1.5 font-ui text-sm font-bold no-underline transition-colors hover:bg-highlight"
                 >
                   {link.label}
                   <span aria-hidden className="text-muted-foreground">↗</span>

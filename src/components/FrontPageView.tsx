@@ -125,7 +125,7 @@ export function FrontPageView({ page, now, counts = [] }: { page: FrontPage; now
               <li key={topic.slug}>
                 <a
                   href={topicPath(topic.slug)}
-                  className="inline-flex items-center rounded-full border border-border bg-card px-4 py-2 font-ui text-sm font-medium no-underline shadow-sm transition-shadow hover:shadow-md"
+                  className="inline-flex items-center border-2 border-border bg-card px-4 py-2 font-ui text-sm font-bold no-underline transition-colors hover:bg-highlight"
                 >
                   {topic.name}
                 </a>

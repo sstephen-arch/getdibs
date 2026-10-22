@@ -14,7 +14,7 @@ const STATUS_DOT: Record<Project["status"], string> = {
 export function StatusPill({ project }: { project: Project }) {
   return (
     <span className="inline-flex items-center gap-2 font-ui text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-      <span aria-hidden className={`size-2 rounded-full ${STATUS_DOT[project.status]}`} />
+      <span aria-hidden className={`size-2 ${STATUS_DOT[project.status]}`} />
       {project.status} · {project.year}
       {project.role ? ` · ${project.role}` : ""}
     </span>
@@ -23,7 +23,7 @@ export function StatusPill({ project }: { project: Project }) {
 
 export function ProjectCard({ project, as: Heading = "h3" }: { project: Project; as?: "h2" | "h3" }) {
   return (
-    <article className="group relative flex flex-col gap-3 rounded-lg border border-border bg-card p-5 shadow-sm transition-shadow duration-300 hover:shadow-md">
+    <article className="group relative flex flex-col gap-3 rounded-lg border border-border bg-card p-5 transition-[transform,box-shadow] duration-200 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_hsl(var(--foreground))]">
       <StatusPill project={project} />
       <Heading className="m-0 font-display text-xl font-bold leading-tight tracking-tight">
         <Link

@@ -231,7 +231,7 @@ export function Article({ entry, html, now }: { entry: Entry; html: string; now:
                 <Link
                   key={topic.slug}
                   href={topicPath(topic.slug)}
-                  className="rounded-full border border-border bg-card px-3 py-1 no-underline hover:border-foreground/30"
+                  className="border border-border bg-card px-3 py-1 font-medium no-underline hover:bg-highlight"
                 >
                   {topic.name}
                 </Link>

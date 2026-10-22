@@ -8,7 +8,7 @@ export default function Page() {
     <SiteShell>
       <article className="measure mx-auto px-5 py-12">
         <p className="eyebrow m-0 mb-3">~/about</p>
-        <h1 className="m-0 font-display text-[clamp(2rem,4.5vw,3rem)] font-semibold tracking-tight">
+        <h1 className="m-0 font-display text-[clamp(2.25rem,5.5vw,3.75rem)] font-bold leading-[0.98] tracking-[-0.04em]">
           About
         </h1>
         <p className="mt-6 font-display text-lg leading-relaxed">

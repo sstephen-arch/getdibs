@@ -14,7 +14,7 @@ export function Lead({ entry, index, now }: { entry: Entry; index?: number; now:
     <section data-band="lead" className="py-10">
       {/* The entry title is this band's heading, so the label is not one. */}
       <SectionHeader index={index} label="Latest" as="p" />
-      <article className="group relative grid overflow-hidden rounded-lg border border-border bg-card shadow-sm transition-shadow duration-300 hover:shadow-md lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
+      <article className="group relative grid overflow-hidden rounded-lg border border-border bg-card transition-[transform,box-shadow] duration-200 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_hsl(var(--foreground))] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
         <div className="flex flex-col justify-center gap-4 p-6 sm:p-10">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <Kicker entry={entry} />
