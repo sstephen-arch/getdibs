@@ -26,9 +26,9 @@ lot of icebreakers, and most of them go the same way: a login nobody remembers,
 a link IT blocks, and twenty minutes gone before anyone plays. I'm also
 competitive, and I think office jargon is funny. So the app is 19 quick games
 named after the phrases we all love to hate, like Quick Sync, Put a Pin in It
-and AI Can't Take My Job, and every round ends with a mock performance review.
+and AI Can't Take My Job, and every game ends with a mock performance review.
 My day job shaped it too. One iPhone hosts. Players join from their phone's
-browser with a QR code or a four-digit meeting ID, nobody creates an account,
+browser with a QR code or, on Wi-Fi, a four-digit meeting ID. Nobody creates an account,
 and on Wi-Fi the game stays on the local network. That's the version I'd want
 to approve if I were the one in IT getting the request.
 
