@@ -10,7 +10,7 @@ takeaways:
   - "Sam Altman says PC memory used 5% of the time is a 'quite terrible' use of scarce DRAM. On utilization alone, he's right."
   - "The same logic condemns the parked car, the spare bedroom and wasted food. Owning things buys availability, privacy and control that utilization doesn't measure."
   - "OpenAI's Stargate has lined up as much as 40% of global DRAM output. The argument points the memory at the company making it."
-  - "The answer to idle memory is to use it for local agents, not to give it up."
+  - "I'd accept centralized memory only with a public say on price, a real way out and a share of the profits. Until then, idle memory should run local agents, not be given up."
 audience: "people running AI on their own hardware"
 checked: "2026-10-31"
 ---
@@ -95,6 +95,29 @@ To be fair, the same applies to me. I build local AI tools, so I have my own
 reasons to like local. Judge the argument on its merits, not on who makes it. On
 the merits, utilization is one measure among several, and it happens to be the
 one that favors whoever owns the biggest data center.
+
+## The only deal I'd take
+
+I'm not against sharing. I'd accept memory being centralized under one owner,
+but only on three conditions.
+
+1. **People set the price.** If the public gives up owning the hardware, the
+   public gets a say in what it costs. We already do this for power:
+   [a utility can't raise its rates on its own](https://www.naruc.org/about-naruc/our-mission/history-background).
+   A state commission has to approve them.
+2. **People can leave.** Anyone can opt out and go back to owning their own
+   hardware whenever they need to, and leaving can't cost more than staying. If
+   centralizing memory makes it scarce and expensive for everyone else, an
+   opt-out on paper is no opt-out.
+3. **People share the upside.** Giving up the right to own something is worth
+   something. If the capacity we hand over makes money, part of it comes back to
+   us. Alaska does this with its oil:
+   [eligible residents get an annual dividend](https://pfd.alaska.gov/Division-Info/About-Us)
+   from the earnings on the state's mineral royalties.
+
+None of that is on offer. What's on offer is a CEO calling our memory a waste
+while his company lines up 40% of the world's supply. Until the deal includes a
+say, a way out and a share, I'm keeping my RAM.
 
 ## Where I land
 
