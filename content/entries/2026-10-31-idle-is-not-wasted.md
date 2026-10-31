@@ -6,11 +6,6 @@ topics: ["local-ai"]
 cover: "/covers/local-ai.webp"
 cover_alt: "Illustration of a MacBook whose screen shows a wireframe cube filled with glowing dots, standing for a model running on the laptop."
 cover_credit: "Cover: illustration by the author."
-takeaways:
-  - "Sam Altman says PC memory used 5% of the time is a 'quite terrible' use of scarce DRAM. On utilization alone, he's right."
-  - "The same logic condemns the parked car, the spare bedroom and wasted food. Owning things buys availability, privacy and control that utilization doesn't measure."
-  - "OpenAI's Stargate has lined up as much as 40% of global DRAM output. The argument points the memory at the company making it."
-  - "I'd accept centralized memory only with a public say on price, a real way out and a share of the profits. Until then, idle memory should run local agents, not be given up."
 audience: "people running AI on their own hardware"
 checked: "2026-10-31"
 ---
@@ -56,18 +51,18 @@ is wasted. By pure allocation, all of it is "quite terrible." A perfect planner
 could put the room, the house and the food to better use.
 
 We don't do that, and it isn't because we can't count. Owning something gets you
-things a utilization chart doesn't measure.
+things a utilization chart doesn't measure. The first is that it's there when I
+need it. In one long Claude Code session I
+[hit 102% of my five-hour limit](/essays/where-my-tokens-go/) and requests were
+refused. My Mac has never told me to come back later.
 
-- **It's there when I need it.** In one long Claude Code session I
-  [hit 102% of my five-hour limit](/essays/where-my-tokens-go/) and requests were
-  refused. My Mac has never told me to come back later.
-- **It stays mine.** What I run locally isn't logged on someone else's server,
-  and it doesn't change when a provider changes its terms.
-- **I already paid for it.** A model running on memory I own costs nothing extra
-  and takes no chip from anyone.
-- **It doesn't need a new building.** Local opposition
-  [blocked or delayed 75 data center projects](/projects/model-bench/) in the
-  first quarter of this year. Memory already on desks needs no permit.
+It also stays mine. What I run locally isn't logged on someone else's server, and
+it doesn't change when a provider changes its terms. And I already paid for it. A
+model running on memory I own costs nothing extra and takes no chip from anyone.
+
+It doesn't need a new building either. Local opposition
+[blocked or delayed 75 data center projects](/projects/model-bench/) in the first
+quarter of this year. Memory already sitting on desks needs no permit.
 
 ## Notice who is making the argument
 
@@ -101,19 +96,21 @@ one that favors whoever owns the biggest data center.
 I'm not against sharing. I'd accept memory being centralized under one owner,
 but only on three conditions.
 
-1. **People set the price.** If the public gives up owning the hardware, the
-   public gets a say in what it costs. We already do this for power:
-   [a utility can't raise its rates on its own](https://www.naruc.org/about-naruc/our-mission/history-background).
-   A state commission has to approve them.
-2. **People can leave.** Anyone can opt out and go back to owning their own
-   hardware whenever they need to, and leaving can't cost more than staying. If
-   centralizing memory makes it scarce and expensive for everyone else, an
-   opt-out on paper is no opt-out.
-3. **People share the upside.** Giving up the right to own something is worth
-   something. If the capacity we hand over makes money, part of it comes back to
-   us. Alaska does this with its oil:
-   [eligible residents get an annual dividend](https://pfd.alaska.gov/Division-Info/About-Us)
-   from the earnings on the state's mineral royalties.
+The first is that people set the price. If the public gives up owning the
+hardware, the public gets a say in what it costs. We already do this for power:
+[a utility can't raise its rates on its own](https://www.naruc.org/about-naruc/our-mission/history-background).
+A state commission has to approve them.
+
+The second is that people can leave. Anyone should be able to opt out and go back
+to owning their own hardware whenever they need to, and leaving can't cost more
+than staying. If centralizing memory makes it scarce and expensive for everyone
+else, an opt-out on paper is no opt-out.
+
+The third is that people share the upside. Giving up the right to own something
+is worth something. If the capacity we hand over makes money, part of it should
+come back to us. Alaska does this with its oil:
+[eligible residents get an annual dividend](https://pfd.alaska.gov/Division-Info/About-Us)
+from the earnings on the state's mineral royalties.
 
 None of that is on offer. What's on offer is a CEO calling our memory a waste
 while his company lines up 40% of the world's supply. Until the deal includes a
