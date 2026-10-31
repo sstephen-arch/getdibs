@@ -97,11 +97,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           </section>
         )}
 
-        <p className="measure mt-14 mb-0 flex flex-wrap justify-between gap-3 border-t border-border pt-6 font-ui text-sm text-muted-foreground">
+        <p className="measure mt-14 mb-0 border-t border-border pt-6 font-ui text-sm text-muted-foreground">
           <Link href="/projects/" className="no-underline hover:text-primary">← All projects</Link>
-          <a href={`${SITE.repo}/blob/main/${project.file}`} className="record text-[0.75rem] no-underline hover:text-primary">
-            view source: {project.file} ↗
-          </a>
         </p>
       </article>
     </SiteShell>

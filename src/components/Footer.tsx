@@ -66,12 +66,7 @@ export function Footer() {
           <span>
             © {new Date().getFullYear()} {SITE.author}
           </span>
-          <span>
-            markdown in git · static export ·{" "}
-            <a href={SITE.repo} className="underline underline-offset-2 hover:text-highlight">
-              source on github
-            </a>
-          </span>
+          <span>markdown in git · static export</span>
         </p>
       </div>
     </footer>

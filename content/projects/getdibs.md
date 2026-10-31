@@ -3,11 +3,7 @@ title: "getdibs"
 summary: "This site. Markdown in the repository, validated at build time, exported as static HTML and served from a Cloudflare Worker."
 status: shipped
 year: "2026"
-links:
-  - label: "GitHub"
-    url: "https://github.com/sstephen-arch/getdibs"
 topics: ["building"]
-featured: true
 ---
 
 Content is markdown with frontmatter. A content layer validates it and names the
