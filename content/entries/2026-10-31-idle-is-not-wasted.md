@@ -32,7 +32,7 @@ data center wins. It isn't close.
 
 The shortage is real too. [Memory makers have shifted capacity toward AI servers](https://en.wikipedia.org/wiki/2024%E2%80%93present_global_memory_supply_shortage),
 and everyone else pays for it. The 128 GB DGX Spark launched at $3,999. It
-[now lists at $6,950](/projects/model-bench/).
+[now lists at $6,950](https://www.servethehome.com/nvidia-dgx-spark-64gb-launched-and-big-128gb-gb10-price-increases/).
 
 ## Apply the same rule to anything else you own
 
@@ -61,7 +61,7 @@ it doesn't change when a provider changes its terms. And I already paid for it. 
 model running on memory I own costs nothing extra and takes no chip from anyone.
 
 It doesn't need a new building either. Local opposition
-[blocked or delayed 75 data center projects](/projects/model-bench/) in the first
+[blocked or delayed 75 data center projects](https://www.datacenterwatch.org/q1-2026) in the first
 quarter of this year. Memory already sitting on desks needs no permit.
 
 ## Notice who is making the argument
