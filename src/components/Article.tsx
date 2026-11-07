@@ -238,13 +238,10 @@ export function Article({ entry, html, now }: { entry: Entry; html: string; now:
               ))}
             </p>
           )}
-          <p className="m-0 flex flex-wrap justify-between gap-3 text-muted-foreground">
+          <p className="m-0 text-muted-foreground">
             <Link href={`/${section}/`} className="no-underline hover:text-foreground">
               ← All {section}
             </Link>
-            <a href={`${SITE.repo}/blob/main/${entry.file}`} className="no-underline hover:text-foreground">
-              View source on GitHub
-            </a>
           </p>
         </footer>
       </article>
