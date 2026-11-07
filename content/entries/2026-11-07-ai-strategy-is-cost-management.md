@@ -1,7 +1,7 @@
 ---
 kind: essay
 title: "AI Strategy Is Also Cost Management"
-summary: "Giving everyone AI is like giving everyone anything that isn't free: sooner or later the bill becomes part of the strategy. Uber, Microsoft and AT&T are already making that trade, and the organizations that get it right will be the ones that can see what each use is worth."
+summary: "Before an AI strategy can manage cost, it has to answer a simpler question: what is it for? Being seen with AI, saving time, changing the workforce and real innovation each need their own strategy, and democratized AI is best funded the way we fund R&D."
 topics: ["ai-strategy"]
 audience: "IT, finance and engineering leaders"
 checked: "2026-11-07"
@@ -14,16 +14,84 @@ before with SaaS and cloud. When you hand out something that isn't free, the
 strategy turns into cost management sooner or later.
 
 AI is metered. Every prompt, every agent loop and every file an assistant reads
-is billed by the token. Democratizing it means handing a metered tool to
-thousands of people at once. That doesn't make it a bad idea. It makes cost one
-of the decisions the strategy has to make on purpose.
+is billed by the token. Before the cost question, though, there's a simpler one
+that a lot of strategies skip. What is your AI strategy actually for?
+
+## Start with the goal
+
+I see four answers, and most organizations are chasing more than one at once.
+
+The first goal is to be seen using AI. That sounds cynical, but it's real and it
+has value. Being seen as modern helps with customers, recruiting and investors.
+AI came up on 337 of 498 S&P 500 earnings calls in the first quarter of this
+year, 68%, the most
+[FactSet has counted in ten years](https://advantage.factset.com/hubfs/Website/Resources%20Section/Research%20Desk/Earnings%20Insight/EarningsInsight_061226.pdf).
+Markets have rewarded the word on its own. One small company's stock
+[rose 450% in February](https://qz.com/sec-ai-washing-enforcement-small-companies-investors-100826)
+after it touted an AI tool for trucking, then fell when scrutiny arrived, and
+regulators have been bringing "AI washing" cases since 2024. That payoff is
+fading. FactSet found that companies citing AI on those calls had a lower median
+price gain this year than companies that didn't, 5.5% against 6.2%. Investors
+are starting to ask for results, and
+[MIT's NANDA initiative](https://virtualizationreview.com/Articles/2025/08/19/MIT-Report-Finds-Most-AI-Business-Investments-Fail-Reveals-GenAI-Divide.aspx)
+found that 95% of the organizations it studied were getting no measurable return
+from generative AI.
+
+The second goal is efficiency, doing today's work in less time. If a report took
+ten hours and now takes five, that's an efficiency. It's the easiest benefit to
+picture and the easiest to overstate. The St. Louis Fed found that workers who
+used generative AI
+[saved about 5.4% of their work hours](https://www.stlouisfed.org/on-the-economy/2025/feb/impact-generative-ai-work-productivity),
+a little over two hours in a 40-hour week. METR ran a controlled study with
+experienced open-source developers and found they were
+[19% slower with AI tools](https://arxiv.org/abs/2507.09089), while believing
+they had been about 20% faster. Efficiency has to be measured, not assumed.
+
+The third goal is efficiency through people: fewer of them, or less experienced
+and less expensive people doing work that used to need someone senior. The
+research supports the second half. In a study of 5,179 customer support agents,
+economists from Stanford and MIT found an AI assistant
+[raised productivity 14% on average and 34% for novice and lower-skilled agents](https://www.nber.org/papers/w31161),
+with little change for the most skilled. Companies are acting on the first half.
+CBS News has tracked a growing list of
+[companies pointing to AI as they cut jobs](https://www.cbsnews.com/news/ai-layoffs-2026-artificial-intelligence-amazon-pinterest/),
+and Angi cut 350 roles
+["in light of AI-driven efficiency improvements."](https://finance.yahoo.com/news/angi-cutting-350-jobs-light-144014636.html)
+It can go too far. Klarna said its AI did the work of 700 agents, then
+[started hiring people again](https://www.entrepreneur.com/business-news/klarna-ceo-reverses-course-by-hiring-more-humans-not-ai/491396)
+after its CEO admitted cost "seems to have been a too predominant evaluation
+factor" and the result was "lower quality."
+
+The fourth goal, and the one I think matters most, is true innovation: something
+that didn't exist before and wouldn't exist without AI. DeepMind's AlphaFold
+predicted protein structures well enough to win its creators a share of the
+[2024 Nobel Prize in Chemistry](https://www.nobelprize.org/prizes/chemistry/2024/press-release/).
+Insilico Medicine used generative AI to find both a new target and a new drug
+for a lung disease, and that drug
+[met its primary endpoint in a Phase 2a trial](https://www.eurekalert.org/news-releases/1086096)
+published in Nature Medicine. Neither came from making an existing task faster.
+Both took years, and the drug is still years from approval.
+
+## Each goal needs its own strategy
+
+It doesn't have to be one or the other. Most organizations move through all four,
+often at the same time. But each needs its own strategy, because each is measured
+differently. Being seen with AI is measured in adoption and perception. Saving
+time is measured in hours and unit cost. Changing the workforce is measured in
+headcount and quality, and Klarna is the reason quality has to be on that list.
+Innovation is measured in new products and new revenue, over years.
+
+Democratization is where those goals meet. Putting AI in everyone's hands is how
+an organization finds its efficiencies and the occasional idea nobody planned
+for. That only works if the program is aimed at the higher goals. Democratization
+measured by usage alone is a signaling strategy, whatever the slide says.
 
 ## The bill arrives fast
 
-Uber is the clearest example. It encouraged engineers to use AI coding tools as
-much as possible and ranked teams on internal leaderboards. Claude Code adoption
-across its 5,000-person engineering organization went from 32% in February to
-84% in March. By April it had
+Uber is the clearest example of usage as the goal. It encouraged engineers to use
+AI coding tools as much as possible and ranked teams on internal leaderboards.
+Claude Code adoption across its 5,000-person engineering organization went from
+32% in February to 84% in March. By April it had
 [used up its AI budget for the whole year](https://finance.yahoo.com/sectors/technology/articles/uber-burned-entire-2026-ai-180347400.html).
 Uber now caps spending at
 [$1,500 per employee per tool each month](https://www.outlookbusiness.com/corporate/uber-caps-ai-tool-usage-after-exhausting-yearly-budget-in-just-4-months),
@@ -113,15 +181,39 @@ Risk belongs in the same analysis as cost. Every model, tool and route in the
 plan needs an answer to who can see the data, who approved it, and what happens
 when it fails.
 
+## Fund it like R&D
+
+Every company has some version of a research and development budget, and nobody
+expects every dollar of it to produce a product. Accounting rules say so
+directly. Under U.S. GAAP, R&D is
+[expensed as it's incurred](https://saylordotorg.github.io/text_financial-accounting/s14-04-accounting-for-research-and-de.html)
+because its future benefit is uncertain. In drug development, about
+[90% of candidates that reach clinical trials fail](https://pubmed.ncbi.nlm.nih.gov/35865092/).
+Nobody calls pharmaceutical research a failure. Working toward the few that
+succeed is the job.
+
+I think democratized AI belongs in the same frame. Give it a fixed budget, treat
+the use cases as a portfolio of experiments, and judge the gains the way R&D
+gains are judged: over time and across the portfolio, not one prompt at a time.
+Most experiments won't pay off. The ones that do can pay for the rest.
+
+R&D also has discipline that AI programs often skip. It has stage gates,
+milestones and the willingness to kill what isn't working. And when something
+proves out, it graduates. It leaves the research budget and becomes an operating
+cost with an owner, a unit price and a target. An efficiency that has proven
+itself shouldn't live on an experiment budget forever, and an innovation bet
+shouldn't be judged like a cost cut in its first quarter.
+
 ## What a strategy has to answer
 
 An AI strategy that only sets adoption targets is an invitation to Uber's April.
-A real one decides which work gets which model, what a unit of that work is
-worth, how spend is tracked and charged back, what happens when a team hits its
-budget, and which risks are acceptable along the way.
+A real one starts with the goal, then decides which work gets which model, what
+a unit of that work is worth, how spend is tracked and charged back, what happens
+when a team hits its budget, which risks are acceptable, and which experiments
+get to graduate.
 
 None of those are technology decisions. They're the same cost, risk and
 governance decisions IT has always made, applied to a resource that's billed by
 the token.
 
-Does your AI strategy have a budget line, or just an adoption target?
+So, what is your AI strategy actually for?
