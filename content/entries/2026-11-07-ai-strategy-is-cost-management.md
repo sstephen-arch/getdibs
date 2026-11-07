@@ -204,16 +204,27 @@ cost with an owner, a unit price and a target. An efficiency that has proven
 itself shouldn't live on an experiment budget forever, and an innovation bet
 shouldn't be judged like a cost cut in its first quarter.
 
-## What a strategy has to answer
+## Where to start
 
 An AI strategy that only sets adoption targets is an invitation to Uber's April.
-A real one starts with the goal, then decides which work gets which model, what
-a unit of that work is worth, how spend is tracked and charged back, what happens
-when a team hits its budget, which risks are acceptable, and which experiments
-get to graduate.
+A real one decides which work gets which model, what a unit of that work is
+worth, how spend is tracked and charged back, which risks are acceptable, and
+which experiments get to graduate. None of those are technology decisions.
+They're the same cost, risk and governance decisions IT has always made, applied
+to a resource that's billed by the token.
 
-None of those are technology decisions. They're the same cost, risk and
-governance decisions IT has always made, applied to a resource that's billed by
-the token.
+Here's my list. Think of the four goals as layers, each one feeding the next.
 
-So, what is your AI strategy actually for?
+1. **Create a strategy for every layer of AI.** Being seen with AI, saving time,
+   changing the workforce and innovation each get their own plan.
+2. **Give every layer a measurable goal that feeds the layers above it.**
+   Adoption should turn into hours saved, hours saved into a better use of
+   people, and all of it into ideas worth funding.
+3. **Decide which layers get the biggest budget and the most aggressive
+   outcomes.** No organization can fund every layer equally, and no layer
+   should be expected to return the same thing.
+4. **Put a time frame on it.** Efficiency should show up in quarters.
+   Innovation may take years. Say which is which up front.
+5. **Create measurable deliverables.** A unit cost, a dashboard, a product, or a
+   decision to stop. Something you can point to when the time frame ends.
+6. **Let the innovation begin.**
