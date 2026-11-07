@@ -28,6 +28,12 @@ export const TOPICS: Topic[] = [
       "Building with an AI agent every day: what it costs, how the work actually flows, and what holds up.",
   },
   {
+    slug: "ai-strategy",
+    name: "AI Strategy",
+    description:
+      "Deciding where AI belongs in an organization: what it costs, what it's worth, and what it risks.",
+  },
+  {
     slug: "building",
     name: "Building",
     description:
